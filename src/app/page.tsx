@@ -279,6 +279,24 @@ export default function Home() {
                 className="contact-form"
                 onSubmit={async (e) => {
                   e.preventDefault();
+
+                  // Rate Limiting Logic (30 minutes)
+                  const LAST_SUBMIT_KEY = "stark_cosmic_last_submit";
+                  const cooldown = 30 * 60 * 1000; // 30 minutes in ms
+                  const lastSubmit = localStorage.getItem(LAST_SUBMIT_KEY);
+
+                  if (lastSubmit) {
+                    const timePassed = Date.now() - parseInt(lastSubmit);
+                    if (timePassed < cooldown) {
+                      const minutesLeft = Math.ceil((cooldown - timePassed) / 60000);
+                      setFormStatus({
+                        type: "error",
+                        message: `System cooldown active. Please wait ${minutesLeft} minutes before sending another message.`
+                      });
+                      return;
+                    }
+                  }
+
                   setIsSubmitting(true);
                   setFormStatus(null);
 
@@ -294,6 +312,7 @@ export default function Home() {
 
                     if (result.status === 200) {
                       setFormStatus({ type: "success", message: "Message sent! I'll get back to you shortly." });
+                      localStorage.setItem(LAST_SUBMIT_KEY, Date.now().toString());
                       target.reset();
                     } else {
                       setFormStatus({ type: "error", message: "Error sending message. Please try again." });
