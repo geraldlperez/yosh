@@ -1,48 +1,25 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
 
-// Hook for mouse position parallax
-function useMousePosition() {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
-  return { mouseX, mouseY };
-}
-
-const techStack = [
-  { id: "py", name: "Python", icon: "python", x: 20, y: 30, connections: ["zap", "n8n", "pd"] },
-  { id: "js", name: "JavaScript", icon: "javascript", x: 50, y: 40, connections: ["react", "node"] },
-  { id: "react", name: "React", icon: "react", x: 70, y: 35, connections: ["next", "js"] },
-  { id: "next", name: "Next.js", icon: "nextdotjs", x: 85, y: 50, connections: ["react", "ver"] },
-  { id: "zap", name: "Zapier", icon: "zapier", x: 35, y: 15, connections: ["py", "n8n"] },
-  { id: "n8n", name: "n8n", icon: "n8n", x: 10, y: 10, connections: ["py", "zap"] },
-  { id: "node", name: "Node.js", icon: "nodedotjs", x: 45, y: 60, connections: ["js", "off"] },
-  { id: "ts", name: "TypeScript", icon: "typescript", x: 75, y: 65, connections: ["next", "react"] },
-  { id: "pd", name: "Pandas", icon: "pandas", x: 30, y: 45, connections: ["py", "sql"] },
-  { id: "sql", name: "SQL", icon: "sqlite", x: 25, y: 70, connections: ["pd", "pg"] },
-  { id: "pg", name: "PostgreSQL", icon: "postgresql", x: 15, y: 85, connections: ["sql"] },
-  { id: "ver", name: "Vercel", icon: "vercel", x: 90, y: 80, connections: ["next"] },
-  { id: "fig", name: "Figma", icon: "figma", x: 60, y: 85, connections: ["can"] },
-  { id: "can", name: "Canva", icon: "canva", x: 80, y: 90, connections: ["fig"] },
-  { id: "off", name: "Microsoft Office", icon: "microsoftoffice", x: 55, y: 15, connections: ["node"] },
-];
+// --- MODULAR IMPORTS ---
+import { projects } from "@/data/projects";
+import { creativeProjects } from "@/data/creative";
+import { techStack } from "@/data/techStack";
+import { useMousePosition } from "@/hooks/useMousePosition";
+import { ProjectCard } from "@/components/ProjectCard";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [activeLightbox, setActiveLightbox] = useState<{ projectId: string, index: number } | null>(null);
   const { mouseX, mouseY } = useMousePosition();
+
+  // UFO Spawning Logic
+  const [ufoKey, setUfoKey] = useState(0);
+  const [ufoTop, setUfoTop] = useState(30);
 
   const springConfig = { damping: 50, stiffness: 100 };
   const starX = useSpring(useTransform(mouseX, [0, 2000], [20, -20]), springConfig);
@@ -57,31 +34,64 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
+    const ufoInterval = setInterval(() => {
+      setUfoTop(Math.floor(Math.random() * 60) + 15);
+      setUfoKey(prev => prev + 1);
+    }, 30000);
+    return () => clearInterval(ufoInterval);
   }, []);
 
   return (
     <main style={{ position: "relative", opacity: mounted ? 1 : 0, transition: "opacity 1.5s ease", minHeight: "100vh" }}>
       
-      {/* Background Layer */}
+      {/* --- Cosmic Background Layer --- */}
       <div className="galaxy-bg" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, background: "#020205", overflow: "hidden" }}>
+        
+        {/* Nebula Mist */}
         <motion.div style={{ x: nebulaX, y: nebulaY, width: "100%", height: "100%" }}>
           <div className="nebula" style={{ top: "-5%", left: "-5%" }} />
           <div className="nebula" style={{ bottom: "-5%", right: "-5%" }} />
         </motion.div>
 
+        {/* Razor Omni-Stars */}
         <motion.div style={{ x: starX, y: starY }} className="stars-container">
           {mounted && [...Array(120)].map((_, i) => (
             <div key={i} className="star-dot" style={{ top: `${(i * 23.7) % 100}%`, left: `${(i * 17.3) % 100}%`, width: i % 10 === 0 ? "2px" : "1px", height: i % 10 === 0 ? "2px" : "1px", "--duration": `${2 + (i % 6)}s` } as any} />
           ))}
+
+          {mounted && [...Array(10)].map((_, i) => {
+            const edge = i % 4;
+            let top = "0%", left = "0%", rotate = 0;
+            if (edge === 0) { top = `${Math.random() * 100}%`; left = "-10%"; rotate = -30 + Math.random() * 60; }
+            else if (edge === 1) { top = "-10%"; left = `${Math.random() * 100}%`; rotate = 60 + Math.random() * 60; }
+            else if (edge === 2) { top = `${Math.random() * 100}%`; left = "110%"; rotate = 150 + Math.random() * 60; }
+            else { top = "110%"; left = `${Math.random() * 100}%`; rotate = 240 + Math.random() * 60; }
+
+            return (
+              <div key={`star-rhythm-${i}`} style={{ position: "absolute", top, left, transform: `rotate(${rotate}deg)`, pointerEvents: "none" }}>
+                <div className="shooting-star" style={{ "--duration": "60s", "--delay": `${i * 6}s` } as any} />
+              </div>
+            );
+          })}
         </motion.div>
 
-        <motion.div className="planet" style={{ top: "15%", right: "8%", x: useSpring(useTransform(mouseX, [0, 2000], [15, -15]), springConfig), y: useSpring(useTransform(mouseY, [0, 1000], [15, -15]), springConfig) }} animate={{ rotate: 360, y: [0, 20, 0] }} transition={{ rotate: { duration: 300, repeat: Infinity, ease: "linear" }, y: { duration: 30, repeat: Infinity, ease: "easeInOut" } }} />
+        <div key={ufoKey} className="ufo-container" style={{ top: `${ufoTop}%` }}>
+          <div className="ufo-dome" />
+          <div className="ufo-saucer"><div className="ufo-lights"><div className="ufo-light" /><div className="ufo-light" /><div className="ufo-light" /></div></div>
+        </div>
+
+        <motion.div 
+          className="planet" 
+          style={{ top: "15%", right: "8%", x: useSpring(useTransform(mouseX, [0, 2000], [15, -15]), springConfig), y: useSpring(useTransform(mouseY, [0, 1000], [15, -15]), springConfig) }}
+          animate={{ rotate: 360, y: [0, 20, 0] }}
+          transition={{ rotate: { duration: 300, repeat: Infinity, ease: "linear" }, y: { duration: 30, repeat: Infinity, ease: "easeInOut" } }}
+        />
       </div>
 
       <div style={{ position: "relative", zIndex: 10 }}>
         <div className="noise" />
 
-        {/* Hero Section */}
+        {/* Hero Section (AESTHETIC RESTORED) */}
         <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "60px", alignItems: "center" }}>
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}>
@@ -93,84 +103,108 @@ export default function Home() {
                 <Link href="#contact" className="glass" style={{ padding: "12px 24px", fontWeight: "600" }}>Partner with Me</Link>
               </div>
             </motion.div>
-
             <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
               <div className="float">
                 <div className="glass light-sweep" style={{ padding: "12px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.15)" }}>
                   <img src={`${basePath}/test-3.png`} alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
                 </div>
               </div>
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "140%", height: "140%", background: "radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%)", zIndex: 1 }} />
             </motion.div>
           </div>
         </section>
 
-        {/* RE-ENGINEERED: Technical Constellation Section */}
+        {/* Technical Constellation */}
         <section id="expertise" className="section-container" style={{ height: "800px", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative" }}>
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <h2 style={{ fontSize: "2.5rem", marginBottom: "20px" }}>Technical Constellation</h2>
-            <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem", marginBottom: "60px" }}>An interconnected map of specialized expertise and systems.</p>
-            
             <div style={{ width: "100%", height: "500px", position: "relative" }}>
-              
-              {/* LAYER 1: 3D Visuals Layer (Does NOT handle mouse events) */}
-              <motion.div 
-                style={{ 
-                  width: "100%", height: "100%", position: "absolute", 
-                  rotateX, rotateY, perspective: "1000px", transformStyle: "preserve-3d",
-                  pointerEvents: "none" // Crucial: Mouse ignores this tilted layer
-                }}
-              >
-                {/* SVG Connections */}
+              <motion.div style={{ width: "100%", height: "100%", position: "absolute", rotateX, rotateY, perspective: "1000px", transformStyle: "preserve-3d", pointerEvents: "none" }}>
                 <svg style={{ position: "absolute", width: "100%", height: "100%", zIndex: 1 }}>
-                  <defs>
-                    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="rgba(255,255,255,0)" /><stop offset="50%" stopColor="rgba(255,255,255,0.2)" /><stop offset="100%" stopColor="rgba(255,255,255,0)" />
-                    </linearGradient>
-                  </defs>
                   {techStack.map(tech => tech.connections.map(targetId => {
                     const target = techStack.find(t => t.id === targetId);
-                    return target ? <motion.line key={`${tech.id}-${targetId}`} x1={`${tech.x}%`} y1={`${tech.y}%`} x2={`${target.x}%`} y2={`${target.y}%`} stroke="url(#lineGrad)" strokeWidth="1" animate={{ opacity: [0.05, 0.2, 0.05] }} transition={{ duration: 4, repeat: Infinity }} /> : null;
+                    return target ? <motion.line key={`${tech.id}-${targetId}`} x1={`${tech.x}%`} y1={`${tech.y}%`} x2={`${target.x}%`} y2={`${target.y}%`} stroke="rgba(255,255,255,0.1)" strokeWidth="1" animate={{ opacity: [0.05, 0.2, 0.05] }} transition={{ duration: 4, repeat: Infinity }} /> : null;
                   }))}
                 </svg>
-
                 {techStack.map((tech, i) => (
                   <ConstellationIcon key={tech.id} tech={tech} i={i} isHovered={hoveredId === tech.id} />
                 ))}
               </motion.div>
-
-              {/* LAYER 2: 2D Stable Sensor Layer (Handles all mouse events) */}
               <div style={{ width: "100%", height: "100%", position: "absolute", top: 0, left: 0, zIndex: 100 }}>
                 {techStack.map((tech) => (
-                  <div
-                    key={`sensor-${tech.id}`}
-                    onMouseEnter={() => setHoveredId(tech.id)}
-                    onMouseLeave={() => setHoveredId(null)}
-                    style={{
-                      position: "absolute",
-                      left: `${tech.x}%`,
-                      top: `${tech.y}%`,
-                      width: "80px", // Perfectly stable hitbox
-                      height: "80px",
-                      transform: "translate(-50%, -50%)",
-                      cursor: "pointer",
-                      // background: "rgba(255,0,0,0.1)", // Uncomment to see sensors during debugging
-                      pointerEvents: "auto"
-                    }}
-                  />
+                  <div key={`sensor-${tech.id}`} onMouseEnter={() => setHoveredId(tech.id)} onMouseLeave={() => setHoveredId(null)} style={{ position: "absolute", left: `${tech.x}%`, top: `${tech.y}%`, width: "80px", height: "80px", transform: "translate(-50%, -50%)", cursor: "pointer", pointerEvents: "auto" }} />
                 ))}
               </div>
-
             </div>
           </motion.div>
         </section>
 
-        {/* Selected Solutions */}
+        {/* Strategic Capabilities */}
+        <section className="section-container">
+          <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Strategic Capabilities</h2>
+          <div className="bento-grid">
+            <motion.div className="glass bento-item" style={{ gridColumn: "span 2", background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 100%)" }} whileHover={{ scale: 1.02 }}>
+              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Web Development</h4>
+              <p style={{ color: "var(--text-secondary)" }}>Engineering systems using React, TypeScript, and modern API architectures.</p>
+            </motion.div>
+            <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
+              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Automation</h4>
+              <p style={{ color: "var(--text-secondary)" }}>Architecting complex workflows to scale virtual operations.</p>
+            </motion.div>
+            <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
+              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Executive Strategy</h4>
+              <p style={{ color: "var(--text-secondary)" }}>High-level coordination and operational leadership.</p>
+            </motion.div>
+            <motion.div className="glass bento-item" style={{ gridColumn: "span 2" }} whileHover={{ scale: 1.02 }}>
+              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Technical VA Support</h4>
+              <p style={{ color: "var(--text-secondary)" }}>Technical expertise supporting founders in day-to-day operations.</p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Selected Solutions (1 PER LINE) */}
         <section id="projects" className="section-container">
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Selected Solutions</h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))", gap: "40px" }}>
-              <ProjectCard title="Intelligent Automation" desc="Building autonomous workflows that eliminate manual data entry and executive overhead." img={`${basePath}/automation-suite.png`} icons={["python", "zapier", "n8n"]} />
-              <ProjectCard title="Full-Stack Ops Hub" desc="Custom internal tools and dashboards for high-level executive decision making." img={`${basePath}/ecommerce-hub.png`} icons={["nextdotjs", "react", "typescript"]} />
+            <div className="projects-grid">
+              {[...projects].reverse().map((project) => (
+                <ProjectCard key={project.id} project={project} basePath={basePath} onExpand={(index) => setActiveLightbox({ projectId: project.id, index })} />
+              ))}
+            </div>
+          </motion.div>
+        </section>
+
+        {/* Visual Studio (3 PER ROW, POSTER SIZE, NO SWEEP) */}
+        <section id="creative" className="section-container">
+          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+            <h2 style={{ fontSize: "2.5rem", marginBottom: "20px" }}>Visual Studio</h2>
+            <div className="creative-grid">
+              {creativeProjects.map((item) => (
+                <motion.div 
+                  key={item.id} 
+                  className="creative-item" 
+                  onClick={() => setActiveLightbox({ projectId: item.id, index: 0 })}
+                  initial={{ opacity: 0, scale: 0.9 }} 
+                  whileInView={{ opacity: 1, scale: 1 }} 
+                  viewport={{ once: true }}
+                >
+                  <img src={item.image} alt={item.title} />
+                  <div className="creative-overlay">
+                    <span className="creative-category">{item.category}</span>
+                    <h3 className="creative-title">{item.title}</h3>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </section>
+
+        {/* Contact */}
+        <section id="contact" className="section-container" style={{ textAlign: "center", paddingBottom: "160px" }}>
+          <motion.div className="glass" style={{ padding: "80px 40px", borderRadius: "40px", border: "1px solid rgba(255, 255, 255, 0.3)", background: "rgba(255, 255, 255, 0.02)" }} whileInView={{ opacity: 1, scale: 1 }} initial={{ opacity: 0, scale: 0.95 }} viewport={{ once: true }}>
+            <h2 className="hero-title" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>Scale your <span className="gradient-text">operations</span>.</h2>
+            <div style={{ display: "flex", gap: "16px", justifyContent: "center", marginTop: "40px" }}>
+              <a href="mailto:hello@gerald.dev" className="btn-primary">Book a Strategy Call</a>
             </div>
           </motion.div>
         </section>
@@ -183,102 +217,57 @@ export default function Home() {
           </div>
         </footer>
       </div>
+
+      <AnimatePresence>
+        {activeLightbox && (
+          <ProjectLightbox 
+            images={
+              projects.find(p => p.id === activeLightbox.projectId)?.gallery || 
+              creativeProjects.filter(p => p.id === activeLightbox.projectId).map(p => p.image) || 
+              []
+            }
+            currentIndex={activeLightbox.index}
+            onClose={() => setActiveLightbox(null)}
+            onNext={() => { 
+              const project = projects.find(p => p.id === activeLightbox.projectId); 
+              if (project) setActiveLightbox({ ...activeLightbox, index: (activeLightbox.index + 1) % project.gallery.length }); 
+            }}
+            onPrev={() => { 
+              const project = projects.find(p => p.id === activeLightbox.projectId); 
+              if (project) setActiveLightbox({ ...activeLightbox, index: (activeLightbox.index - 1 + project.gallery.length) % project.gallery.length }); 
+            }}
+          />
+        )}
+      </AnimatePresence>
     </main>
   );
 }
 
 function ConstellationIcon({ tech, i, isHovered }: { tech: any, i: number, isHovered: boolean }) {
-  const [error, setError] = useState(false);
   const iconUrl = `https://api.iconify.design/simple-icons:${tech.icon}.svg?color=white`;
-
-  const particles = useMemo(() => {
-    return [...Array(12)].map((_, j) => ({
-      id: j,
-      x: (Math.random() - 0.5) * 160,
-      y: (Math.random() - 0.5) * 160,
-      size: Math.random() * 4 + 2
-    }));
-  }, []);
+  const particles = useMemo(() => [...Array(12)].map((_, j) => ({ id: j, x: (Math.random() - 0.5) * 160, y: (Math.random() - 0.5) * 160, size: Math.random() * 4 + 2 })), []);
 
   return (
-    <motion.div
-      style={{ position: "absolute", left: `${tech.x}%`, top: `${tech.y}%`, zIndex: isHovered ? 10 : 2, transform: "translate(-50%, -50%)" }}
-      animate={{ y: isHovered ? 0 : [0, -10, 0] }}
-      transition={{ duration: 4 + Math.random() * 2, repeat: Infinity, delay: i * 0.2, ease: "easeInOut" }}
-    >
+    <motion.div style={{ position: "absolute", left: `${tech.x}%`, top: `${tech.y}%`, zIndex: isHovered ? 10 : 2, transform: "translate(-50%, -50%)" }} animate={{ y: isHovered ? 0 : [0, -10, 0] }} transition={{ duration: 4 + Math.random() * 2, repeat: Infinity, delay: i * 0.2, ease: "easeInOut" }}>
       <div style={{ position: "relative" }}>
-        {/* Explosion Layer */}
-        <AnimatePresence>
-          {isHovered && (
-            <div style={{ position: "absolute", top: "50%", left: "50%" }}>
-              {particles.map(p => (
-                <motion.div
-                  key={p.id}
-                  initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-                  animate={{ x: p.x, y: p.y, opacity: 0, scale: 0 }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                  style={{ position: "absolute", width: p.size, height: p.size, background: "white", borderRadius: "50%", boxShadow: "0 0 10px white" }}
-                />
-              ))}
-            </div>
-          )}
-        </AnimatePresence>
-
-        <motion.div 
-          animate={{ 
-            scale: isHovered ? 1.5 : 1, // Increased scale for impact
-            backgroundColor: isHovered ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.03)",
-            borderColor: isHovered ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.1)"
-          }}
-          style={{ 
-            width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center",
-            borderRadius: "12px", border: "1px solid",
-            backdropFilter: "blur(8px)", position: "relative",
-            boxShadow: isHovered ? "0 0 40px rgba(255,255,255,0.5)" : "none",
-            transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)" // Snappy pop
-          }}
-        >
-          {!error ? (
-            <img 
-              src={iconUrl} 
-              alt={tech.name} 
-              style={{ width: "24px", height: "24px", filter: isHovered ? "drop-shadow(0 0 10px rgba(255,255,255,0.9))" : "none" }}
-              onError={() => setError(true)}
-            />
-          ) : (
-            <span style={{ fontSize: "1.2rem", fontWeight: "bold", color: "white", opacity: 0.8 }}>{tech.name.charAt(0)}</span>
-          )}
-          
-          <span 
-            style={{ 
-              position: "absolute", top: "120%", fontSize: "0.7rem", color: "white", 
-              opacity: isHovered ? 1 : 0.4, fontWeight: isHovered ? "600" : "400",
-              whiteSpace: "nowrap", textShadow: isHovered ? "0 0 10px rgba(255,255,255,0.5)" : "none",
-              transition: "all 0.3s ease"
-            }}
-          >
-            {tech.name}
-          </span>
+        <AnimatePresence>{isHovered && (<div style={{ position: "absolute", top: "50%", left: "50%" }}>{particles.map(p => (<motion.div key={p.id} initial={{ x: 0, y: 0, opacity: 1, scale: 1 }} animate={{ x: p.x, y: p.y, opacity: 0, scale: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} style={{ position: "absolute", width: p.size, height: p.size, background: "white", borderRadius: "50%", boxShadow: "0 0 10px white" }} />))}</div>)}</AnimatePresence>
+        <motion.div animate={{ scale: isHovered ? 1.5 : 1, backgroundColor: isHovered ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.03)", borderColor: isHovered ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.1)" }} style={{ width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "12px", border: "1px solid", backdropFilter: "blur(8px)", position: "relative", boxShadow: isHovered ? "0 0 40px rgba(255,255,255,0.5)" : "none", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)" }}>
+          <img src={iconUrl} alt={tech.name} style={{ width: "24px", height: "24px", filter: isHovered ? "drop-shadow(0 0 10px rgba(255,255,255,0.9))" : "none" }} />
+          <span style={{ position: "absolute", top: "120%", fontSize: "0.7rem", color: "white", opacity: isHovered ? 1 : 0.4, fontWeight: isHovered ? "600" : "400", whiteSpace: "nowrap", textShadow: isHovered ? "0 0 10px rgba(255,255,255,0.5)" : "none", transition: "all 0.3s ease" }}>{tech.name}</span>
         </motion.div>
       </div>
     </motion.div>
   );
 }
 
-function ProjectCard({ title, desc, img, icons }: { title: string, desc: string, img: string, icons: string[] }) {
+function ProjectLightbox({ images, currentIndex, onClose, onNext, onPrev }: { images: string[], currentIndex: number, onClose: () => void, onNext: () => void, onPrev: () => void }) {
   return (
-    <motion.div className="glass" whileHover={{ y: -10 }} transition={{ duration: 0.3 }} style={{ overflow: "hidden" }}>
-      <div style={{ height: "300px", overflow: "hidden" }}>
-        <img src={img} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.7 }} />
-      </div>
-      <div style={{ padding: "32px" }}>
-        <h3 style={{ fontSize: "1.75rem", marginBottom: "16px" }}>{title}</h3>
-        <p style={{ color: "var(--text-secondary)", marginBottom: "24px", lineHeight: "1.6" }}>{desc}</p>
-        <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
-          {icons.map(icon => (
-            <img key={icon} src={`https://api.iconify.design/simple-icons:${icon}.svg?color=white`} style={{ width: "24px", opacity: 0.6 }} alt={icon} />
-          ))}
-        </div>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(0,0,0,0.9)", backdropFilter: "blur(20px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px" }}>
+      <button onClick={onClose} style={{ position: "absolute", top: "40px", right: "40px", color: "white", fontSize: "2rem", background: "none", border: "none", cursor: "pointer" }}>×</button>
+      <div style={{ position: "relative", maxWidth: "1200px", width: "100%", aspectRatio: "16/9", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <button onClick={onPrev} style={{ position: "absolute", left: "-60px", color: "white", fontSize: "3rem", background: "none", border: "none", cursor: "pointer" }}>‹</button>
+        <img src={images[currentIndex]} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
+        <button onClick={onNext} style={{ position: "absolute", right: "-60px", color: "white", fontSize: "3rem", background: "none", border: "none", cursor: "pointer" }}>›</button>
       </div>
     </motion.div>
   );
