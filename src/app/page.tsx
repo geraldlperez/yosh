@@ -140,11 +140,11 @@ export default function Home() {
         <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "60px", alignItems: "center" }}>
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}>
-              <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Stark Cosmic // Strategic Operations</span>
+              <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Strategic Operations & Systems</span>
               <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
               <p className="subtitle" style={{ fontSize: "1.5rem", marginBottom: "32px" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong> and <strong>Executive Support</strong>.</p>
               <div style={{ display: "flex", gap: "16px" }}>
-                <Link href="#projects" className="btn-primary">View Solutions</Link>
+                <Link href={`${basePath}/resume.pdf`} target="_blank" className="btn-primary">View Resume</Link>
                 <Link href="#contact" className="glass" style={{ padding: "12px 24px", fontWeight: "600" }}>Partner with Me</Link>
               </div>
             </motion.div>
@@ -198,11 +198,19 @@ export default function Home() {
             </motion.div>
             <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
               <h4 style={{ fontSize: "1.25rem", color: "white" }}>Executive Strategy</h4>
-              <p style={{ color: "var(--text-secondary)" }}>High-level coordination and operational leadership.</p>
+              <p style={{ color: "var(--text-secondary)" }}>High-level coordination and operational leadership for growth.</p>
             </motion.div>
-            <motion.div className="glass bento-item" style={{ gridColumn: "span 2" }} whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Technical VA Support</h4>
-              <p style={{ color: "var(--text-secondary)" }}>Technical expertise supporting founders in day-to-day operations.</p>
+            <motion.div className="glass bento-item" style={{ background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 100%)" }} whileHover={{ scale: 1.02 }}>
+              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Data Architecture</h4>
+              <p style={{ color: "var(--text-secondary)" }}>Building advanced Excel systems and local databases for organized data management.</p>
+            </motion.div>
+            <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
+              <h4 style={{ fontSize: "1.25rem", color: "white" }}>AI Engineering</h4>
+              <p style={{ color: "var(--text-secondary)" }}>Developing custom AI solutions and prompt engineering for automation.</p>
+            </motion.div>
+            <motion.div className="glass bento-item" style={{ gridColumn: "span 3" }} whileHover={{ scale: 1.02 }}>
+              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Technical Partnership</h4>
+              <p style={{ color: "var(--text-secondary)" }}>End-to-end technical expertise supporting founders in building, scaling, and optimizing day-to-day operations.</p>
             </motion.div>
           </div>
         </section>
@@ -222,7 +230,7 @@ export default function Home() {
         {/* Visual Studio (3 PER ROW, POSTER SIZE, NO SWEEP) */}
         <section id="creative" className="section-container">
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <h2 style={{ fontSize: "2.5rem", marginBottom: "20px" }}>Visual Studio</h2>
+            <h2 style={{ fontSize: "2.5rem", marginBottom: "20px" }}>Creative</h2>
             <div className="creative-grid">
               {creativeProjects.map((item) => (
                 <motion.div
@@ -257,7 +265,7 @@ export default function Home() {
               {/* Left Pane: Professional Context */}
               <div>
                 <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Available for Partnership</span>
-                <h2 className="hero-title" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", marginTop: "16px", marginBottom: "24px" }}>Stark <span className="gradient-text">Cosmic</span></h2>
+                <h2 className="hero-title" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", marginTop: "16px", marginBottom: "24px" }}>Let's <span className="gradient-text">Connect</span></h2>
                 <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem", lineHeight: "1.6", marginBottom: "40px" }}>
                   I help high-growth teams and founders bridge the gap between complex systems and executive support. Whether you need an AI-driven workflow, a custom web solution, or strategic technical assistance—let's discuss how we can scale your operations.
                 </p>
@@ -328,17 +336,17 @@ export default function Home() {
                 <div className="form-row">
                   <div className="input-group">
                     <label className="input-label">First Name</label>
-                    <input name="first_name" type="text" placeholder="John" required className="input-field" />
+                    <input name="first_name" type="text" placeholder="Yoshi" required className="input-field" />
                   </div>
                   <div className="input-group">
                     <label className="input-label">Last Name</label>
-                    <input name="last_name" type="text" placeholder="Doe" required className="input-field" />
+                    <input name="last_name" type="text" placeholder="Tsukino" required className="input-field" />
                   </div>
                 </div>
 
                 <div className="input-group">
                   <label className="input-label">Email Address</label>
-                  <input name="email" type="email" placeholder="john@example.com" required className="input-field" />
+                  <input name="email" type="email" placeholder="yoshitsukino@example.com" required className="input-field" />
                 </div>
 
                 <div className="input-group">
@@ -347,7 +355,7 @@ export default function Home() {
                 </div>
 
                 <button type="submit" disabled={isSubmitting} className="submit-btn">
-                  {isSubmitting ? "Sending Message..." : "Send Discovery Request"}
+                  {isSubmitting ? "Sending Message..." : "Send Message"}
                 </button>
 
                 {formStatus && (

@@ -18,7 +18,7 @@ export const projects = [
       "/project-first/P1-9.png"
     ],
     link: "https://fukushimart-convenience-store.web.app/",
-    tech: ["python", "zapier", "n8n"]
+    tech: ["nodedotjs", "nextdotjs", "react", "javascript", "python", "framer", "firebase"]
   },
   {
     id: "project-2",
@@ -39,6 +39,6 @@ export const projects = [
       "/project-second/P2-9.png"
     ],
     link: "https://hrd-project-blond.vercel.app/",
-    tech: ["nextdotjs", "react", "typescript", "postgresql"]
+    tech: ["nodedotjs", "nextdotjs", "react", "javascript", "typescript", "framer", "supabase", "postgresql", "vercel"]
   }
 ];

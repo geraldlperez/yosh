@@ -83,7 +83,7 @@ export function ProjectCard({
         <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.7", marginBottom: "32px" }}>{project.description}</p>
         
         <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ display: "flex", gap: "12px" }}>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
             {project.tech.map((t: string) => (
               <img key={t} src={`https://api.iconify.design/simple-icons:${t}.svg?color=white`} style={{ width: "20px", opacity: 0.5 }} alt={t} />
             ))}
