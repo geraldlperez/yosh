@@ -19,7 +19,8 @@ export default function Home() {
 
   // UFO Spawning Logic
   const [ufoKey, setUfoKey] = useState(0);
-  const [ufoTop, setUfoTop] = useState(30);
+  const [ufoRotation, setUfoRotation] = useState(0);
+  const [ufoStart, setUfoStart] = useState({ top: 30, left: -100 });
 
   const springConfig = { damping: 50, stiffness: 100 };
   const starX = useSpring(useTransform(mouseX, [0, 2000], [20, -20]), springConfig);
@@ -35,9 +36,31 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
     const ufoInterval = setInterval(() => {
-      setUfoTop(Math.floor(Math.random() * 60) + 15);
+      const edge = Math.floor(Math.random() * 4);
+      let top = 30, left = -150, rotation = 0;
+      
+      if (edge === 0) { // From Left
+        top = Math.random() * 80 + 10;
+        left = -150;
+        rotation = -10 + Math.random() * 20;
+      } else if (edge === 1) { // From Right
+        top = Math.random() * 80 + 10;
+        left = 1500; // Will animate towards negative
+        rotation = 170 + Math.random() * 20;
+      } else if (edge === 2) { // From Top
+        top = -150;
+        left = Math.random() * 80 + 10;
+        rotation = 80 + Math.random() * 20;
+      } else { // From Bottom
+        top = 1000;
+        left = Math.random() * 80 + 10;
+        rotation = -80 + Math.random() * 20;
+      }
+
+      setUfoStart({ top, left });
+      setUfoRotation(rotation);
       setUfoKey(prev => prev + 1);
-    }, 30000);
+    }, 25000);
     return () => clearInterval(ufoInterval);
   }, []);
 
@@ -75,10 +98,26 @@ export default function Home() {
           })}
         </motion.div>
 
-        <div key={ufoKey} className="ufo-container" style={{ top: `${ufoTop}%` }}>
+        <motion.div 
+          key={ufoKey} 
+          className="ufo-container" 
+          initial={{ top: `${ufoStart.top}px`, left: `${ufoStart.left}px`, rotate: ufoRotation, opacity: 0 }}
+          animate={{ 
+            x: [0, 2000], // Moves "forward" relative to its rotation
+            opacity: [0, 1, 1, 0]
+          }}
+          transition={{ duration: 15, ease: "linear" }}
+          style={{ position: "absolute" }}
+        >
           <div className="ufo-dome" />
-          <div className="ufo-saucer"><div className="ufo-lights"><div className="ufo-light" /><div className="ufo-light" /><div className="ufo-light" /></div></div>
-        </div>
+          <div className="ufo-saucer">
+            <div className="ufo-lights">
+              <div className="ufo-light" />
+              <div className="ufo-light" />
+              <div className="ufo-light" />
+            </div>
+          </div>
+        </motion.div>
 
         <motion.div 
           className="planet" 
@@ -123,7 +162,7 @@ export default function Home() {
                 <svg style={{ position: "absolute", width: "100%", height: "100%", zIndex: 1 }}>
                   {techStack.map(tech => tech.connections.map(targetId => {
                     const target = techStack.find(t => t.id === targetId);
-                    return target ? <motion.line key={`${tech.id}-${targetId}`} x1={`${tech.x}%`} y1={`${tech.y}%`} x2={`${target.x}%`} y2={`${target.y}%`} stroke="rgba(255,255,255,0.1)" strokeWidth="1" animate={{ opacity: [0.05, 0.2, 0.05] }} transition={{ duration: 4, repeat: Infinity }} /> : null;
+                    return target ? <motion.line key={`${tech.id}-${targetId}`} x1={`${tech.x}%`} y1={`${tech.y}%`} x2={`${target.x}%`} y2={`${target.y}%`} stroke="rgba(255,255,255,0.25)" strokeWidth="1.2" animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 4, repeat: Infinity }} /> : null;
                   }))}
                 </svg>
                 {techStack.map((tech, i) => (
@@ -251,7 +290,7 @@ function ConstellationIcon({ tech, i, isHovered }: { tech: any, i: number, isHov
     <motion.div style={{ position: "absolute", left: `${tech.x}%`, top: `${tech.y}%`, zIndex: isHovered ? 10 : 2, transform: "translate(-50%, -50%)" }} animate={{ y: isHovered ? 0 : [0, -10, 0] }} transition={{ duration: 4 + Math.random() * 2, repeat: Infinity, delay: i * 0.2, ease: "easeInOut" }}>
       <div style={{ position: "relative" }}>
         <AnimatePresence>{isHovered && (<div style={{ position: "absolute", top: "50%", left: "50%" }}>{particles.map(p => (<motion.div key={p.id} initial={{ x: 0, y: 0, opacity: 1, scale: 1 }} animate={{ x: p.x, y: p.y, opacity: 0, scale: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} style={{ position: "absolute", width: p.size, height: p.size, background: "white", borderRadius: "50%", boxShadow: "0 0 10px white" }} />))}</div>)}</AnimatePresence>
-        <motion.div animate={{ scale: isHovered ? 1.5 : 1, backgroundColor: isHovered ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.03)", borderColor: isHovered ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.1)" }} style={{ width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "12px", border: "1px solid", backdropFilter: "blur(8px)", position: "relative", boxShadow: isHovered ? "0 0 40px rgba(255,255,255,0.5)" : "none", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)" }}>
+        <motion.div animate={{ scale: isHovered ? 1.5 : 1, backgroundColor: isHovered ? "rgba(255,255,255,0.25)" : "rgba(255,255,255,0.05)", borderColor: isHovered ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.2)" }} style={{ width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "12px", border: "1px solid", backdropFilter: "blur(8px)", position: "relative", boxShadow: isHovered ? "0 0 40px rgba(255,255,255,0.5)" : "none", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)" }}>
           <img src={iconUrl} alt={tech.name} style={{ width: "24px", height: "24px", filter: isHovered ? "drop-shadow(0 0 10px rgba(255,255,255,0.9))" : "none" }} />
           <span style={{ position: "absolute", top: "120%", fontSize: "0.7rem", color: "white", opacity: isHovered ? 1 : 0.4, fontWeight: isHovered ? "600" : "400", whiteSpace: "nowrap", textShadow: isHovered ? "0 0 10px rgba(255,255,255,0.5)" : "none", transition: "all 0.3s ease" }}>{tech.name}</span>
         </motion.div>

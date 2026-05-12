@@ -41,8 +41,8 @@ export function ConstellationIcon({ tech, i, isHovered }: { tech: any, i: number
         <motion.div 
           animate={{ 
             scale: isHovered ? 1.5 : 1, 
-            backgroundColor: isHovered ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.03)", 
-            borderColor: isHovered ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.1)" 
+            backgroundColor: isHovered ? "rgba(255,255,255,0.25)" : "rgba(255,255,255,0.05)", 
+            borderColor: isHovered ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.2)" 
           }} 
           style={{ 
             width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", 
