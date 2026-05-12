@@ -233,7 +233,7 @@ export default function Home() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                 >
-                  <img src={item.image} alt={item.title} />
+                  <img src={`${basePath}${item.image}`} alt={item.title} />
                   <div className="creative-overlay">
                     <span className="creative-category">{item.category}</span>
                     <h3 className="creative-title">{item.title}</h3>
@@ -372,11 +372,11 @@ export default function Home() {
       <AnimatePresence>
         {activeLightbox && (
           <ProjectLightbox
-            images={
+            images={(
               projects.find(p => p.id === activeLightbox.projectId)?.gallery ||
               creativeProjects.filter(p => p.id === activeLightbox.projectId).map(p => p.image) ||
               []
-            }
+            ).map(img => `${basePath}${img}`)}
             currentIndex={activeLightbox.index}
             onClose={() => setActiveLightbox(null)}
             onNext={() => {
