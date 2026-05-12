@@ -15,6 +15,7 @@ import emailjs from "@emailjs/browser";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [activeLightbox, setActiveLightbox] = useState<{ projectId: string, index: number } | null>(null);
   const { mouseX, mouseY } = useMousePosition();
@@ -23,11 +24,7 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState<{ type: "success" | "error", message: string } | null>(null);
 
-  // UFO Spawning Logic
-  const [ufoKey, setUfoKey] = useState(0);
-  const [ufoRotation, setUfoRotation] = useState(0);
-  const [ufoStart, setUfoStart] = useState({ top: 30, left: -100 });
-
+  // Planet Spawning Logic (Keeping stars and planets)
   const springConfig = { damping: 50, stiffness: 100 };
   const starX = useSpring(useTransform(mouseX, [0, 2000], [20, -20]), springConfig);
   const starY = useSpring(useTransform(mouseY, [0, 1000], [20, -20]), springConfig);
@@ -41,37 +38,47 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
-    const ufoInterval = setInterval(() => {
-      const edge = Math.floor(Math.random() * 4);
-      let top = 30, left = -150, rotation = 0;
-
-      if (edge === 0) { // From Left
-        top = Math.random() * 80 + 10;
-        left = -150;
-        rotation = -10 + Math.random() * 20;
-      } else if (edge === 1) { // From Right
-        top = Math.random() * 80 + 10;
-        left = 1500; // Will animate towards negative
-        rotation = 170 + Math.random() * 20;
-      } else if (edge === 2) { // From Top
-        top = -150;
-        left = Math.random() * 80 + 10;
-        rotation = 80 + Math.random() * 20;
-      } else { // From Bottom
-        top = 1000;
-        left = Math.random() * 80 + 10;
-        rotation = -80 + Math.random() * 20;
-      }
-
-      setUfoStart({ top, left });
-      setUfoRotation(rotation);
-      setUfoKey(prev => prev + 1);
-    }, 25000);
-    return () => clearInterval(ufoInterval);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2800);
+    
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id.replace("#", ""));
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      window.history.pushState(null, "", id);
+    }
+  };
+
   return (
-    <main style={{ position: "relative", opacity: mounted ? 1 : 0, transition: "opacity 1.5s ease", minHeight: "100vh" }}>
+    <main id="top" style={{ position: "relative", minHeight: "100vh" }}>
+      <AnimatePresence>
+        {loading && (
+          <motion.div 
+            key="preloader"
+            exit={{ opacity: 0, scale: 1.1 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="preloader-container"
+          >
+            <div className="loader-text">Initializing_System</div>
+            <div className="loader-bar-bg">
+              <div className="loader-bar-fill" />
+            </div>
+            <div className="loader-status">GERALD_PEREZ // OPS_CORE_V1.0</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div style={{ opacity: loading ? 0 : 1, transition: "opacity 1.5s ease" }}>
 
       {/* --- Cosmic Background Layer --- */}
       <div className="galaxy-bg" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, background: "#020205", overflow: "hidden" }}>
@@ -102,27 +109,6 @@ export default function Home() {
               </div>
             );
           })}
-        </motion.div>
-
-        <motion.div
-          key={ufoKey}
-          className="ufo-container"
-          initial={{ top: `${ufoStart.top}px`, left: `${ufoStart.left}px`, rotate: ufoRotation, opacity: 0 }}
-          animate={{
-            x: [0, 2000], // Moves "forward" relative to its rotation
-            opacity: [0, 1, 1, 0]
-          }}
-          transition={{ duration: 15, ease: "linear" }}
-          style={{ position: "absolute" }}
-        >
-          <div className="ufo-dome" />
-          <div className="ufo-saucer">
-            <div className="ufo-lights">
-              <div className="ufo-light" />
-              <div className="ufo-light" />
-              <div className="ufo-light" />
-            </div>
-          </div>
         </motion.div>
 
         <motion.div
@@ -185,7 +171,7 @@ export default function Home() {
         </section>
 
         {/* Strategic Capabilities */}
-        <section className="section-container">
+        <section id="capabilities" className="section-container">
           <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Strategic Capabilities</h2>
           <div className="bento-grid">
             <motion.div className="glass bento-item" style={{ gridColumn: "span 2", background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 100%)" }} whileHover={{ scale: 1.02 }}>
@@ -375,6 +361,35 @@ export default function Home() {
             <Link href="https://github.com" target="_blank" className="hover-text">GitHub</Link>
           </div>
         </footer>
+      </div>
+    </div>
+
+      {/* Precision Sidebar (Right) */}
+      <div className="precision-sidebar">
+        <Link href="#top" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#top")}>
+          <span className="sidebar-tooltip">Top</span>
+          <img src="https://api.iconify.design/lucide:home.svg?color=white" className="sidebar-icon" alt="Home" />
+        </Link>
+        <Link href="#expertise" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#expertise")}>
+          <span className="sidebar-tooltip">Expertise</span>
+          <img src="https://api.iconify.design/lucide:zap.svg?color=white" className="sidebar-icon" alt="Expertise" />
+        </Link>
+        <Link href="#capabilities" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#capabilities")}>
+          <span className="sidebar-tooltip">Capabilities</span>
+          <img src="https://api.iconify.design/lucide:layout-grid.svg?color=white" className="sidebar-icon" alt="Capabilities" />
+        </Link>
+        <Link href="#projects" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#projects")}>
+          <span className="sidebar-tooltip">Projects</span>
+          <img src="https://api.iconify.design/lucide:briefcase.svg?color=white" className="sidebar-icon" alt="Projects" />
+        </Link>
+        <Link href="#creative" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#creative")}>
+          <span className="sidebar-tooltip">Creative</span>
+          <img src="https://api.iconify.design/lucide:palette.svg?color=white" className="sidebar-icon" alt="Creative" />
+        </Link>
+        <Link href="#contact" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#contact")}>
+          <span className="sidebar-tooltip">Contact</span>
+          <img src="https://api.iconify.design/lucide:mail.svg?color=white" className="sidebar-icon" alt="Contact" />
+        </Link>
       </div>
 
       <AnimatePresence>
