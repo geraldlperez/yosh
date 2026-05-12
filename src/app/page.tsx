@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 // Hook for mouse position parallax
 function useMousePosition() {
@@ -21,115 +21,63 @@ function useMousePosition() {
   return { mouseX, mouseY };
 }
 
+const techStack = [
+  { id: "py", name: "Python", icon: "python", x: 20, y: 30, connections: ["zap", "n8n", "pd"] },
+  { id: "js", name: "JavaScript", icon: "javascript", x: 50, y: 40, connections: ["react", "node"] },
+  { id: "react", name: "React", icon: "react", x: 70, y: 35, connections: ["next", "js"] },
+  { id: "next", name: "Next.js", icon: "nextdotjs", x: 85, y: 50, connections: ["react", "ver"] },
+  { id: "zap", name: "Zapier", icon: "zapier", x: 35, y: 15, connections: ["py", "n8n"] },
+  { id: "n8n", name: "n8n", icon: "n8n", x: 10, y: 10, connections: ["py", "zap"] },
+  { id: "node", name: "Node.js", icon: "nodedotjs", x: 45, y: 60, connections: ["js", "off"] },
+  { id: "ts", name: "TypeScript", icon: "typescript", x: 75, y: 65, connections: ["next", "react"] },
+  { id: "pd", name: "Pandas", icon: "pandas", x: 30, y: 45, connections: ["py", "sql"] },
+  { id: "sql", name: "SQL", icon: "sqlite", x: 25, y: 70, connections: ["pd", "pg"] },
+  { id: "pg", name: "PostgreSQL", icon: "postgresql", x: 15, y: 85, connections: ["sql"] },
+  { id: "ver", name: "Vercel", icon: "vercel", x: 90, y: 80, connections: ["next"] },
+  { id: "fig", name: "Figma", icon: "figma", x: 60, y: 85, connections: ["can"] },
+  { id: "can", name: "Canva", icon: "canva", x: 80, y: 90, connections: ["fig"] },
+  { id: "off", name: "Microsoft Office", icon: "microsoftoffice", x: 55, y: 15, connections: ["node"] },
+];
+
 export default function Home() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const { mouseX, mouseY } = useMousePosition();
 
-  // Parallax transforms - keep subtle
-  const springConfig = { damping: 40, stiffness: 80 };
+  const springConfig = { damping: 50, stiffness: 100 };
   const starX = useSpring(useTransform(mouseX, [0, 2000], [20, -20]), springConfig);
   const starY = useSpring(useTransform(mouseY, [0, 1000], [20, -20]), springConfig);
-  
   const nebulaX = useSpring(useTransform(mouseX, [0, 2000], [40, -40]), springConfig);
   const nebulaY = useSpring(useTransform(mouseY, [0, 1000], [40, -40]), springConfig);
+
+  const rotateX = useSpring(useTransform(mouseY, [0, 1000], [10, -10]), springConfig);
+  const rotateY = useSpring(useTransform(mouseX, [0, 2000], [-10, 10]), springConfig);
 
   const basePath = process.env.NODE_ENV === "production" ? "/yosh" : "";
 
   useEffect(() => {
     setMounted(true);
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <main style={{ position: "relative", opacity: mounted ? 1 : 0, transition: "opacity 1.5s ease", minHeight: "100vh" }}>
       
-      {/* Immersive White/Silver Galaxy Background */}
+      {/* Background Layer */}
       <div className="galaxy-bg" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, background: "#020205", overflow: "hidden" }}>
-        
-        {/* White Nebula Mist */}
         <motion.div style={{ x: nebulaX, y: nebulaY, width: "100%", height: "100%" }}>
           <div className="nebula" style={{ top: "-5%", left: "-5%" }} />
           <div className="nebula" style={{ bottom: "-5%", right: "-5%" }} />
         </motion.div>
 
-        {/* Dynamic Starfield & Sequential "Rhythm" Shooting Stars */}
         <motion.div style={{ x: starX, y: starY }} className="stars-container">
           {mounted && [...Array(120)].map((_, i) => (
-            <div 
-              key={i} 
-              className="star-dot" 
-              style={{ 
-                top: `${(i * 23.7) % 100}%`, 
-                left: `${(i * 17.3) % 100}%`,
-                width: i % 10 === 0 ? "2px" : "1px",
-                height: i % 10 === 0 ? "2px" : "1px",
-                // @ts-ignore
-                "--duration": `${2 + (i % 6)}s`
-              }} 
-            />
+            <div key={i} className="star-dot" style={{ top: `${(i * 23.7) % 100}%`, left: `${(i * 17.3) % 100}%`, width: i % 10 === 0 ? "2px" : "1px", height: i % 10 === 0 ? "2px" : "1px", "--duration": `${2 + (i % 6)}s` } as any} />
           ))}
-
-          {/* SEQUENTIAL RHYTHM: One star at a time with 5s gaps */}
-          {mounted && [...Array(10)].map((_, i) => {
-            const edge = i % 4;
-            let top = "0%", left = "0%", rotate = 0;
-            
-            if (edge === 0) { // Left Edge
-              top = `${Math.random() * 100}%`;
-              left = "-15%";
-              rotate = -30 + Math.random() * 60;
-            } else if (edge === 1) { // Top Edge
-              top = "-15%";
-              left = `${Math.random() * 100}%`;
-              rotate = 60 + Math.random() * 60;
-            } else if (edge === 2) { // Right Edge
-              top = `${Math.random() * 100}%`;
-              left = "115%";
-              rotate = 150 + Math.random() * 60;
-            } else { // Bottom Edge
-              top = "115%";
-              left = `${Math.random() * 100}%`;
-              rotate = 240 + Math.random() * 60;
-            }
-
-            return (
-              <div 
-                key={`star-rhythm-${i}`}
-                style={{
-                  position: "absolute",
-                  top,
-                  left,
-                  transform: `rotate(${rotate}deg)`,
-                  pointerEvents: "none"
-                }}
-              >
-                <div 
-                  className="shooting-star" 
-                  style={{ 
-                    width: `${80 + Math.random() * 80}px`,
-                    // @ts-ignore
-                    "--duration": "60s",
-                    "--delay": `${i * 6}s` 
-                  }} 
-                />
-              </div>
-            );
-          })}
         </motion.div>
 
-        {/* The Silver Moon */}
-        <motion.div 
-          className="planet"
-          style={{ top: "15%", right: "8%", x: useSpring(useTransform(mouseX, [0, 2000], [15, -15]), springConfig), y: useSpring(useTransform(mouseY, [0, 1000], [15, -15]), springConfig) }}
-          animate={{ rotate: 360, y: [0, 20, 0] }}
-          transition={{ rotate: { duration: 300, repeat: Infinity, ease: "linear" }, y: { duration: 30, repeat: Infinity, ease: "easeInOut" } }}
-        />
+        <motion.div className="planet" style={{ top: "15%", right: "8%", x: useSpring(useTransform(mouseX, [0, 2000], [15, -15]), springConfig), y: useSpring(useTransform(mouseY, [0, 1000], [15, -15]), springConfig) }} animate={{ rotate: 360, y: [0, 20, 0] }} transition={{ rotate: { duration: 300, repeat: Infinity, ease: "linear" }, y: { duration: 30, repeat: Infinity, ease: "easeInOut" } }} />
       </div>
 
-      {/* Content Layer */}
       <div style={{ position: "relative", zIndex: 10 }}>
         <div className="noise" />
 
@@ -147,14 +95,73 @@ export default function Home() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
-              <div className="float" style={{ position: "relative", zIndex: 2 }}>
+              <div className="float">
                 <div className="glass light-sweep" style={{ padding: "12px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.15)" }}>
                   <img src={`${basePath}/test-3.png`} alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
                 </div>
               </div>
-              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "140%", height: "140%", background: "radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%)", zIndex: 1 }} />
             </motion.div>
           </div>
+        </section>
+
+        {/* RE-ENGINEERED: Technical Constellation Section */}
+        <section id="expertise" className="section-container" style={{ height: "800px", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative" }}>
+          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+            <h2 style={{ fontSize: "2.5rem", marginBottom: "20px" }}>Technical Constellation</h2>
+            <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem", marginBottom: "60px" }}>An interconnected map of specialized expertise and systems.</p>
+            
+            <div style={{ width: "100%", height: "500px", position: "relative" }}>
+              
+              {/* LAYER 1: 3D Visuals Layer (Does NOT handle mouse events) */}
+              <motion.div 
+                style={{ 
+                  width: "100%", height: "100%", position: "absolute", 
+                  rotateX, rotateY, perspective: "1000px", transformStyle: "preserve-3d",
+                  pointerEvents: "none" // Crucial: Mouse ignores this tilted layer
+                }}
+              >
+                {/* SVG Connections */}
+                <svg style={{ position: "absolute", width: "100%", height: "100%", zIndex: 1 }}>
+                  <defs>
+                    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="rgba(255,255,255,0)" /><stop offset="50%" stopColor="rgba(255,255,255,0.2)" /><stop offset="100%" stopColor="rgba(255,255,255,0)" />
+                    </linearGradient>
+                  </defs>
+                  {techStack.map(tech => tech.connections.map(targetId => {
+                    const target = techStack.find(t => t.id === targetId);
+                    return target ? <motion.line key={`${tech.id}-${targetId}`} x1={`${tech.x}%`} y1={`${tech.y}%`} x2={`${target.x}%`} y2={`${target.y}%`} stroke="url(#lineGrad)" strokeWidth="1" animate={{ opacity: [0.05, 0.2, 0.05] }} transition={{ duration: 4, repeat: Infinity }} /> : null;
+                  }))}
+                </svg>
+
+                {techStack.map((tech, i) => (
+                  <ConstellationIcon key={tech.id} tech={tech} i={i} isHovered={hoveredId === tech.id} />
+                ))}
+              </motion.div>
+
+              {/* LAYER 2: 2D Stable Sensor Layer (Handles all mouse events) */}
+              <div style={{ width: "100%", height: "100%", position: "absolute", top: 0, left: 0, zIndex: 100 }}>
+                {techStack.map((tech) => (
+                  <div
+                    key={`sensor-${tech.id}`}
+                    onMouseEnter={() => setHoveredId(tech.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                    style={{
+                      position: "absolute",
+                      left: `${tech.x}%`,
+                      top: `${tech.y}%`,
+                      width: "80px", // Perfectly stable hitbox
+                      height: "80px",
+                      transform: "translate(-50%, -50%)",
+                      cursor: "pointer",
+                      // background: "rgba(255,0,0,0.1)", // Uncomment to see sensors during debugging
+                      pointerEvents: "auto"
+                    }}
+                  />
+                ))}
+              </div>
+
+            </div>
+          </motion.div>
         </section>
 
         {/* Selected Solutions */}
@@ -162,72 +169,12 @@ export default function Home() {
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Selected Solutions</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))", gap: "40px" }}>
-              <motion.div className="glass" whileHover={{ y: -10 }} transition={{ duration: 0.3 }} style={{ overflow: "hidden" }}>
-                <div style={{ height: "300px", overflow: "hidden" }}>
-                  <img src={`${basePath}/automation-suite.png`} alt="Automation Suite" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.7 }} />
-                </div>
-                <div style={{ padding: "32px" }}>
-                  <h3 style={{ fontSize: "1.75rem", marginBottom: "16px" }}>Intelligent Automation</h3>
-                  <p style={{ color: "var(--text-secondary)", marginBottom: "24px", lineHeight: "1.6" }}>Building autonomous workflows that eliminate manual data entry and executive overhead.</p>
-                  <div style={{ display: "flex", gap: "12px" }}>
-                    <span className="glass" style={{ padding: "6px 14px", fontSize: "0.75rem", fontWeight: "600" }}>Python</span>
-                    <span className="glass" style={{ padding: "6px 14px", fontSize: "0.75rem", fontWeight: "600" }}>Zapier/Make</span>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div className="glass" whileHover={{ y: -10 }} transition={{ duration: 0.3 }} style={{ overflow: "hidden" }}>
-                <div style={{ height: "300px", overflow: "hidden" }}>
-                  <img src={`${basePath}/ecommerce-hub.png`} alt="E-commerce Hub" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.7 }} />
-                </div>
-                <div style={{ padding: "32px" }}>
-                  <h3 style={{ fontSize: "1.75rem", marginBottom: "16px" }}>Full-Stack Ops Hub</h3>
-                  <p style={{ color: "var(--text-secondary)", marginBottom: "24px", lineHeight: "1.6" }}>Custom internal tools and dashboards for high-level executive decision making.</p>
-                  <div style={{ display: "flex", gap: "12px" }}>
-                    <span className="glass" style={{ padding: "6px 14px", fontSize: "0.75rem", fontWeight: "600" }}>Next.js</span>
-                    <span className="glass" style={{ padding: "6px 14px", fontSize: "0.75rem", fontWeight: "600" }}>Dashboards</span>
-                  </div>
-                </div>
-              </motion.div>
+              <ProjectCard title="Intelligent Automation" desc="Building autonomous workflows that eliminate manual data entry and executive overhead." img={`${basePath}/automation-suite.png`} icons={["python", "zapier", "n8n"]} />
+              <ProjectCard title="Full-Stack Ops Hub" desc="Custom internal tools and dashboards for high-level executive decision making." img={`${basePath}/ecommerce-hub.png`} icons={["nextdotjs", "react", "typescript"]} />
             </div>
           </motion.div>
         </section>
 
-        {/* Expertise Grid */}
-        <section id="expertise" className="section-container">
-          <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Strategic Capabilities</h2>
-          <div className="bento-grid">
-            <motion.div className="glass bento-item" style={{ gridColumn: "span 2", background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 100%)" }} whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Web Development</h4>
-              <p style={{ color: "var(--text-secondary)" }}>Engineering robust front-end and back-end systems using React, TypeScript, and modern API architectures.</p>
-            </motion.div>
-            <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Automation Architecture</h4>
-              <p style={{ color: "var(--text-secondary)" }}>Architecting complex multi-step workflows to scale virtual operations.</p>
-            </motion.div>
-            <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Executive Strategy</h4>
-              <p style={{ color: "var(--text-secondary)" }}>High-level coordination, project management, and operational leadership.</p>
-            </motion.div>
-            <motion.div className="glass bento-item" style={{ gridColumn: "span 2" }} whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Technical VA Support</h4>
-              <p style={{ color: "var(--text-secondary)" }}>Providing deep technical expertise to support founders and C-suite executives in their day-to-day operations.</p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Contact Section */}
-        <section id="contact" className="section-container" style={{ textAlign: "center", paddingBottom: "160px" }}>
-          <motion.div className="glass" style={{ padding: "80px 40px", borderRadius: "40px", border: "1px solid rgba(255, 255, 255, 0.3)", background: "rgba(255, 255, 255, 0.02)" }} whileInView={{ opacity: 1, scale: 1 }} initial={{ opacity: 0, scale: 0.95 }} viewport={{ once: true }}>
-            <h2 className="hero-title" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>Scale your <span className="gradient-text">operations</span>.</h2>
-            <p className="subtitle" style={{ margin: "24px auto" }}>Ready to hire a Technical Partner for your next phase of growth?</p>
-            <div style={{ display: "flex", gap: "16px", justifyContent: "center", marginTop: "40px" }}>
-              <a href="mailto:hello@gerald.dev" className="btn-primary">Book a Strategy Call</a>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* Footer */}
         <footer className="section-container" style={{ borderTop: "1px solid var(--glass-border)", padding: "40px 24px", color: "var(--text-secondary)", fontSize: "0.875rem", display: "flex", justifyContent: "space-between" }}>
           <p>© 2026 Gerald Perez</p>
           <div style={{ display: "flex", gap: "24px" }}>
@@ -237,5 +184,102 @@ export default function Home() {
         </footer>
       </div>
     </main>
+  );
+}
+
+function ConstellationIcon({ tech, i, isHovered }: { tech: any, i: number, isHovered: boolean }) {
+  const [error, setError] = useState(false);
+  const iconUrl = `https://api.iconify.design/simple-icons:${tech.icon}.svg?color=white`;
+
+  const particles = useMemo(() => {
+    return [...Array(12)].map((_, j) => ({
+      id: j,
+      x: (Math.random() - 0.5) * 160,
+      y: (Math.random() - 0.5) * 160,
+      size: Math.random() * 4 + 2
+    }));
+  }, []);
+
+  return (
+    <motion.div
+      style={{ position: "absolute", left: `${tech.x}%`, top: `${tech.y}%`, zIndex: isHovered ? 10 : 2, transform: "translate(-50%, -50%)" }}
+      animate={{ y: isHovered ? 0 : [0, -10, 0] }}
+      transition={{ duration: 4 + Math.random() * 2, repeat: Infinity, delay: i * 0.2, ease: "easeInOut" }}
+    >
+      <div style={{ position: "relative" }}>
+        {/* Explosion Layer */}
+        <AnimatePresence>
+          {isHovered && (
+            <div style={{ position: "absolute", top: "50%", left: "50%" }}>
+              {particles.map(p => (
+                <motion.div
+                  key={p.id}
+                  initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+                  animate={{ x: p.x, y: p.y, opacity: 0, scale: 0 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  style={{ position: "absolute", width: p.size, height: p.size, background: "white", borderRadius: "50%", boxShadow: "0 0 10px white" }}
+                />
+              ))}
+            </div>
+          )}
+        </AnimatePresence>
+
+        <motion.div 
+          animate={{ 
+            scale: isHovered ? 1.5 : 1, // Increased scale for impact
+            backgroundColor: isHovered ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.03)",
+            borderColor: isHovered ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.1)"
+          }}
+          style={{ 
+            width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center",
+            borderRadius: "12px", border: "1px solid",
+            backdropFilter: "blur(8px)", position: "relative",
+            boxShadow: isHovered ? "0 0 40px rgba(255,255,255,0.5)" : "none",
+            transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)" // Snappy pop
+          }}
+        >
+          {!error ? (
+            <img 
+              src={iconUrl} 
+              alt={tech.name} 
+              style={{ width: "24px", height: "24px", filter: isHovered ? "drop-shadow(0 0 10px rgba(255,255,255,0.9))" : "none" }}
+              onError={() => setError(true)}
+            />
+          ) : (
+            <span style={{ fontSize: "1.2rem", fontWeight: "bold", color: "white", opacity: 0.8 }}>{tech.name.charAt(0)}</span>
+          )}
+          
+          <span 
+            style={{ 
+              position: "absolute", top: "120%", fontSize: "0.7rem", color: "white", 
+              opacity: isHovered ? 1 : 0.4, fontWeight: isHovered ? "600" : "400",
+              whiteSpace: "nowrap", textShadow: isHovered ? "0 0 10px rgba(255,255,255,0.5)" : "none",
+              transition: "all 0.3s ease"
+            }}
+          >
+            {tech.name}
+          </span>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
+
+function ProjectCard({ title, desc, img, icons }: { title: string, desc: string, img: string, icons: string[] }) {
+  return (
+    <motion.div className="glass" whileHover={{ y: -10 }} transition={{ duration: 0.3 }} style={{ overflow: "hidden" }}>
+      <div style={{ height: "300px", overflow: "hidden" }}>
+        <img src={img} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.7 }} />
+      </div>
+      <div style={{ padding: "32px" }}>
+        <h3 style={{ fontSize: "1.75rem", marginBottom: "16px" }}>{title}</h3>
+        <p style={{ color: "var(--text-secondary)", marginBottom: "24px", lineHeight: "1.6" }}>{desc}</p>
+        <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
+          {icons.map(icon => (
+            <img key={icon} src={`https://api.iconify.design/simple-icons:${icon}.svg?color=white`} style={{ width: "24px", opacity: 0.6 }} alt={icon} />
+          ))}
+        </div>
+      </div>
+    </motion.div>
   );
 }
