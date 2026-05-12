@@ -34,6 +34,8 @@ export default function Home() {
   const nebulaX = useSpring(useTransform(mouseX, [0, 2000], [40, -40]), springConfig);
   const nebulaY = useSpring(useTransform(mouseY, [0, 1000], [40, -40]), springConfig);
 
+  const basePath = process.env.NODE_ENV === "production" ? "/yosh" : "";
+
   useEffect(() => {
     setMounted(true);
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -147,7 +149,7 @@ export default function Home() {
             <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
               <div className="float" style={{ position: "relative", zIndex: 2 }}>
                 <div className="glass light-sweep" style={{ padding: "12px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.15)" }}>
-                  <img src="/test-3.png" alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
+                  <img src={`${basePath}/test-3.png`} alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
                 </div>
               </div>
               <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "140%", height: "140%", background: "radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%)", zIndex: 1 }} />
@@ -162,7 +164,7 @@ export default function Home() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))", gap: "40px" }}>
               <motion.div className="glass" whileHover={{ y: -10 }} transition={{ duration: 0.3 }} style={{ overflow: "hidden" }}>
                 <div style={{ height: "300px", overflow: "hidden" }}>
-                  <img src="/automation-suite.png" alt="Automation Suite" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.7 }} />
+                  <img src={`${basePath}/automation-suite.png`} alt="Automation Suite" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.7 }} />
                 </div>
                 <div style={{ padding: "32px" }}>
                   <h3 style={{ fontSize: "1.75rem", marginBottom: "16px" }}>Intelligent Automation</h3>
@@ -176,7 +178,7 @@ export default function Home() {
 
               <motion.div className="glass" whileHover={{ y: -10 }} transition={{ duration: 0.3 }} style={{ overflow: "hidden" }}>
                 <div style={{ height: "300px", overflow: "hidden" }}>
-                  <img src="/ecommerce-hub.png" alt="E-commerce Hub" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.7 }} />
+                  <img src={`${basePath}/ecommerce-hub.png`} alt="E-commerce Hub" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.7 }} />
                 </div>
                 <div style={{ padding: "32px" }}>
                   <h3 style={{ fontSize: "1.75rem", marginBottom: "16px" }}>Full-Stack Ops Hub</h3>
