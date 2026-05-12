@@ -11,11 +11,17 @@ import { techStack } from "@/data/techStack";
 import { useMousePosition } from "@/hooks/useMousePosition";
 import { ProjectCard } from "@/components/ProjectCard";
 
+import emailjs from "@emailjs/browser";
+
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [activeLightbox, setActiveLightbox] = useState<{ projectId: string, index: number } | null>(null);
   const { mouseX, mouseY } = useMousePosition();
+
+  // Form State
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState<{ type: "success" | "error", message: string } | null>(null);
 
   // UFO Spawning Logic
   const [ufoKey, setUfoKey] = useState(0);
@@ -38,7 +44,7 @@ export default function Home() {
     const ufoInterval = setInterval(() => {
       const edge = Math.floor(Math.random() * 4);
       let top = 30, left = -150, rotation = 0;
-      
+
       if (edge === 0) { // From Left
         top = Math.random() * 80 + 10;
         left = -150;
@@ -66,10 +72,10 @@ export default function Home() {
 
   return (
     <main style={{ position: "relative", opacity: mounted ? 1 : 0, transition: "opacity 1.5s ease", minHeight: "100vh" }}>
-      
+
       {/* --- Cosmic Background Layer --- */}
       <div className="galaxy-bg" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, background: "#020205", overflow: "hidden" }}>
-        
+
         {/* Nebula Mist */}
         <motion.div style={{ x: nebulaX, y: nebulaY, width: "100%", height: "100%" }}>
           <div className="nebula" style={{ top: "-5%", left: "-5%" }} />
@@ -98,11 +104,11 @@ export default function Home() {
           })}
         </motion.div>
 
-        <motion.div 
-          key={ufoKey} 
-          className="ufo-container" 
+        <motion.div
+          key={ufoKey}
+          className="ufo-container"
           initial={{ top: `${ufoStart.top}px`, left: `${ufoStart.left}px`, rotate: ufoRotation, opacity: 0 }}
-          animate={{ 
+          animate={{
             x: [0, 2000], // Moves "forward" relative to its rotation
             opacity: [0, 1, 1, 0]
           }}
@@ -119,8 +125,8 @@ export default function Home() {
           </div>
         </motion.div>
 
-        <motion.div 
-          className="planet" 
+        <motion.div
+          className="planet"
           style={{ top: "15%", right: "8%", x: useSpring(useTransform(mouseX, [0, 2000], [15, -15]), springConfig), y: useSpring(useTransform(mouseY, [0, 1000], [15, -15]), springConfig) }}
           animate={{ rotate: 360, y: [0, 20, 0] }}
           transition={{ rotate: { duration: 300, repeat: Infinity, ease: "linear" }, y: { duration: 30, repeat: Infinity, ease: "easeInOut" } }}
@@ -134,7 +140,7 @@ export default function Home() {
         <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "60px", alignItems: "center" }}>
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}>
-              <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Technical Executive Operations</span>
+              <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Stark Cosmic // Strategic Operations</span>
               <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
               <p className="subtitle" style={{ fontSize: "1.5rem", marginBottom: "32px" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong> and <strong>Executive Support</strong>.</p>
               <div style={{ display: "flex", gap: "16px" }}>
@@ -153,10 +159,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Technical Constellation */}
+        {/* Technical Stack */}
         <section id="expertise" className="section-container" style={{ height: "800px", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative" }}>
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <h2 style={{ fontSize: "2.5rem", marginBottom: "20px" }}>Technical Constellation</h2>
+            <h2 style={{ fontSize: "2.5rem", marginBottom: "20px" }}>Technical Stack</h2>
             <div style={{ width: "100%", height: "500px", position: "relative" }}>
               <motion.div style={{ width: "100%", height: "100%", position: "absolute", rotateX, rotateY, perspective: "1000px", transformStyle: "preserve-3d", pointerEvents: "none" }}>
                 <svg style={{ position: "absolute", width: "100%", height: "100%", zIndex: 1 }}>
@@ -201,10 +207,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Selected Solutions (1 PER LINE) */}
+        {/* Projects */}
         <section id="projects" className="section-container">
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Selected Solutions</h2>
+            <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Projects</h2>
             <div className="projects-grid">
               {[...projects].reverse().map((project) => (
                 <ProjectCard key={project.id} project={project} basePath={basePath} onExpand={(index) => setActiveLightbox({ projectId: project.id, index })} />
@@ -219,12 +225,12 @@ export default function Home() {
             <h2 style={{ fontSize: "2.5rem", marginBottom: "20px" }}>Visual Studio</h2>
             <div className="creative-grid">
               {creativeProjects.map((item) => (
-                <motion.div 
-                  key={item.id} 
-                  className="creative-item" 
+                <motion.div
+                  key={item.id}
+                  className="creative-item"
                   onClick={() => setActiveLightbox({ projectId: item.id, index: 0 })}
-                  initial={{ opacity: 0, scale: 0.9 }} 
-                  whileInView={{ opacity: 1, scale: 1 }} 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                 >
                   <img src={item.image} alt={item.title} />
@@ -239,11 +245,98 @@ export default function Home() {
         </section>
 
         {/* Contact */}
-        <section id="contact" className="section-container" style={{ textAlign: "center", paddingBottom: "160px" }}>
-          <motion.div className="glass" style={{ padding: "80px 40px", borderRadius: "40px", border: "1px solid rgba(255, 255, 255, 0.3)", background: "rgba(255, 255, 255, 0.02)" }} whileInView={{ opacity: 1, scale: 1 }} initial={{ opacity: 0, scale: 0.95 }} viewport={{ once: true }}>
-            <h2 className="hero-title" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>Scale your <span className="gradient-text">operations</span>.</h2>
-            <div style={{ display: "flex", gap: "16px", justifyContent: "center", marginTop: "40px" }}>
-              <a href="mailto:hello@gerald.dev" className="btn-primary">Book a Strategy Call</a>
+        <section id="contact" className="section-container" style={{ paddingBottom: "160px" }}>
+          <motion.div
+            className="glass"
+            style={{ padding: "60px", borderRadius: "40px", border: "1px solid rgba(255, 255, 255, 0.3)", background: "rgba(255, 255, 255, 0.02)" }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            viewport={{ once: true }}
+          >
+            <div className="contact-grid">
+              {/* Left Pane: Professional Context */}
+              <div>
+                <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Available for Partnership</span>
+                <h2 className="hero-title" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", marginTop: "16px", marginBottom: "24px" }}>Stark <span className="gradient-text">Cosmic</span></h2>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem", lineHeight: "1.6", marginBottom: "40px" }}>
+                  I help high-growth teams and founders bridge the gap between complex systems and executive support. Whether you need an AI-driven workflow, a custom web solution, or strategic technical assistance—let's discuss how we can scale your operations.
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "white", opacity: 0.8 }}>
+                    <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>✉️</div>
+                    <span>grldprz.yosh@gmail.com</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "white", opacity: 0.8 }}>
+                    <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>🔗</div>
+                    <span>linkedin.com/in/geraldperez</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Pane: Contact Form */}
+              <form
+                className="contact-form"
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setIsSubmitting(true);
+                  setFormStatus(null);
+
+                  const target = e.target as HTMLFormElement;
+
+                  try {
+                    const result = await emailjs.sendForm(
+                      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "",
+                      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "",
+                      target,
+                      process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || ""
+                    );
+
+                    if (result.status === 200) {
+                      setFormStatus({ type: "success", message: "Message sent! I'll get back to you shortly." });
+                      target.reset();
+                    } else {
+                      setFormStatus({ type: "error", message: "Error sending message. Please try again." });
+                    }
+                  } catch (err) {
+                    console.error("EmailJS Error:", err);
+                    setFormStatus({ type: "error", message: "Network error. Please try again." });
+                  } finally {
+                    setIsSubmitting(false);
+                  }
+                }}
+              >
+                <div className="form-row">
+                  <div className="input-group">
+                    <label className="input-label">First Name</label>
+                    <input name="first_name" type="text" placeholder="John" required className="input-field" />
+                  </div>
+                  <div className="input-group">
+                    <label className="input-label">Last Name</label>
+                    <input name="last_name" type="text" placeholder="Doe" required className="input-field" />
+                  </div>
+                </div>
+
+                <div className="input-group">
+                  <label className="input-label">Email Address</label>
+                  <input name="email" type="email" placeholder="john@example.com" required className="input-field" />
+                </div>
+
+                <div className="input-group">
+                  <label className="input-label">How can I help you?</label>
+                  <textarea name="message" placeholder="Describe your project or needs..." required className="textarea-field" />
+                </div>
+
+                <button type="submit" disabled={isSubmitting} className="submit-btn">
+                  {isSubmitting ? "Sending Message..." : "Send Discovery Request"}
+                </button>
+
+                {formStatus && (
+                  <div className={`form-status ${formStatus.type === "success" ? "form-success" : "form-error"}`}>
+                    {formStatus.message}
+                  </div>
+                )}
+              </form>
             </div>
           </motion.div>
         </section>
@@ -259,21 +352,21 @@ export default function Home() {
 
       <AnimatePresence>
         {activeLightbox && (
-          <ProjectLightbox 
+          <ProjectLightbox
             images={
-              projects.find(p => p.id === activeLightbox.projectId)?.gallery || 
-              creativeProjects.filter(p => p.id === activeLightbox.projectId).map(p => p.image) || 
+              projects.find(p => p.id === activeLightbox.projectId)?.gallery ||
+              creativeProjects.filter(p => p.id === activeLightbox.projectId).map(p => p.image) ||
               []
             }
             currentIndex={activeLightbox.index}
             onClose={() => setActiveLightbox(null)}
-            onNext={() => { 
-              const project = projects.find(p => p.id === activeLightbox.projectId); 
-              if (project) setActiveLightbox({ ...activeLightbox, index: (activeLightbox.index + 1) % project.gallery.length }); 
+            onNext={() => {
+              const project = projects.find(p => p.id === activeLightbox.projectId);
+              if (project) setActiveLightbox({ ...activeLightbox, index: (activeLightbox.index + 1) % project.gallery.length });
             }}
-            onPrev={() => { 
-              const project = projects.find(p => p.id === activeLightbox.projectId); 
-              if (project) setActiveLightbox({ ...activeLightbox, index: (activeLightbox.index - 1 + project.gallery.length) % project.gallery.length }); 
+            onPrev={() => {
+              const project = projects.find(p => p.id === activeLightbox.projectId);
+              if (project) setActiveLightbox({ ...activeLightbox, index: (activeLightbox.index - 1 + project.gallery.length) % project.gallery.length });
             }}
           />
         )}
