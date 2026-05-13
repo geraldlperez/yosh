@@ -17,4 +17,8 @@ export const techStack = [
   { id: "fig", name: "Figma", icon: "figma", x: 60, y: 85, connections: ["can"] },
   { id: "can", name: "Canva", icon: "canva", x: 80, y: 90, connections: ["fig"] },
   { id: "off", name: "Microsoft Office", icon: "microsoftoffice", x: 55, y: 15, connections: ["node"] },
+  { id: "tail", name: "Tailwind CSS", icon: "tailwindcss", x: 95, y: 35, connections: ["next"] },
+  { id: "prisma", name: "Prisma", icon: "prisma", x: 60, y: 55, connections: ["node", "pg"] },
+  { id: "gh", name: "GitHub", icon: "github", x: 95, y: 15, connections: ["ver"] },
+  { id: "owasp", name: "OWASP ZAP", icon: "owasp", x: 5, y: 40, connections: ["py", "node"] },
 ];

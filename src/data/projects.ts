@@ -39,6 +39,6 @@ export const projects = [
       "/project-second/P2-9.png"
     ],
     link: "https://hrd-project-blond.vercel.app/",
-    tech: ["nodedotjs", "nextdotjs", "react", "javascript", "typescript", "framer", "supabase", "postgresql", "vercel"]
+    tech: ["nodedotjs", "nextdotjs", "react", "javascript", "typescript", "framer", "supabase", "postgresql", "prisma", "tailwindcss", "owasp", "vercel"]
   }
 ];

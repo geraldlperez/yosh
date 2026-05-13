@@ -129,9 +129,9 @@ export default function Home() {
               <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Strategic Operations & Systems</span>
               <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
               <p className="subtitle" style={{ fontSize: "1.5rem", marginBottom: "32px" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong> and <strong>Executive Support</strong>.</p>
-              <div style={{ display: "flex", gap: "16px" }}>
-                <Link href={`${basePath}/resume.pdf`} target="_blank" className="btn-primary">View Resume</Link>
-                <Link href="#contact" className="glass" style={{ padding: "12px 24px", fontWeight: "600" }}>Partner with Me</Link>
+              <div className="hero-buttons" style={{ display: "flex", gap: "16px", marginTop: "32px" }}>
+                <Link href="/resume.pdf" target="_blank" className="btn-primary" style={{ padding: "16px 32px", background: "white", color: "black", border: "none", borderRadius: "12px", fontWeight: "700", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flex: 1 }}>View Resume</Link>
+                <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ padding: "16px 32px", background: "rgba(255,255,255,0.05)", color: "white", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", fontWeight: "600", cursor: "pointer", backdropFilter: "blur(10px)", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>Partner with Me</button>
               </div>
             </motion.div>
             <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
@@ -368,7 +368,7 @@ export default function Home() {
       <div className="precision-sidebar">
         <Link href="#top" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#top")}>
           <span className="sidebar-tooltip">Top</span>
-          <img src="https://api.iconify.design/lucide:home.svg?color=white" className="sidebar-icon" alt="Home" />
+          <img src={`${basePath}/logo.png`} className="sidebar-icon" alt="Home" style={{ borderRadius: "50%" }} />
         </Link>
         <Link href="#expertise" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#expertise")}>
           <span className="sidebar-tooltip">Expertise</span>
