@@ -37,7 +37,7 @@ export function ProjectCard({
       <div 
         onClick={() => onExpand(index)} // Trigger Lightbox on click
         style={{ 
-          height: "400px", // Increased from 300px
+          height: "clamp(250px, 40vh, 400px)", // Responsive height
           position: "relative", 
           overflow: "hidden", 
           background: "#000",
@@ -58,7 +58,7 @@ export function ProjectCard({
         </AnimatePresence>
 
         {/* Hover Hint */}
-        <div className="hover-hint" style={{ position: "absolute", top: "20px", right: "20px", background: "rgba(0,0,0,0.5)", padding: "8px 12px", borderRadius: "10px", fontSize: "0.6rem", color: "white", backdropFilter: "blur(4px)", opacity: 0.8, pointerEvents: "none" }}>
+        <div className="hover-hint" style={{ position: "absolute", top: "15px", right: "15px", background: "rgba(0,0,0,0.5)", padding: "6px 10px", borderRadius: "8px", fontSize: "0.55rem", color: "white", backdropFilter: "blur(4px)", opacity: 0.8, pointerEvents: "none" }}>
           CLICK TO ENLARGE
         </div>
 
@@ -72,25 +72,26 @@ export function ProjectCard({
         </div>
       </div>
 
-      <div style={{ padding: "40px", flex: 1, display: "flex", flexDirection: "column" }}>
+      <div style={{ padding: "clamp(24px, 5vw, 40px)", flex: 1, display: "flex", flexDirection: "column" }}>
         <div style={{ marginBottom: "16px" }}>
-          <h3 style={{ fontSize: "1.75rem", marginBottom: "4px" }}>{project.title}</h3>
-          <span style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: "600" }}>
+          <h3 style={{ fontSize: "clamp(1.25rem, 4vw, 1.75rem)", marginBottom: "4px" }}>{project.title}</h3>
+          <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: "600" }}>
             {project.role}
           </span>
         </div>
 
-        <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.7", marginBottom: "32px" }}>{project.description}</p>
+        <p style={{ color: "var(--text-secondary)", fontSize: "clamp(0.85rem, 2vw, 0.95rem)", lineHeight: "1.7", marginBottom: "32px" }}>{project.description}</p>
         
-        <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+        <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
             {project.tech.map((t: string) => (
-              <img key={t} src={`https://api.iconify.design/simple-icons:${t}.svg?color=white`} style={{ width: "20px", opacity: 0.5 }} alt={t} />
+              <img key={t} src={`https://api.iconify.design/simple-icons:${t}.svg?color=white`} style={{ width: "18px", opacity: 0.5 }} alt={t} />
             ))}
           </div>
-          <Link href={project.link} target="_blank" className="btn-secondary" style={{ padding: "10px 20px", fontSize: "0.85rem", borderRadius: "10px" }}>Visit Project →</Link>
+          <Link href={project.link} target="_blank" className="btn-secondary" style={{ padding: "10px 20px", fontSize: "0.8rem", borderRadius: "10px", flex: "1", textAlign: "center", minWidth: "120px" }}>Visit Project →</Link>
         </div>
       </div>
+
     </motion.div>
   );
 }

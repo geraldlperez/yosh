@@ -23,6 +23,9 @@ export default function Home() {
   // Form State
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState<{ type: "success" | "error", message: string } | null>(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [notification, setNotification] = useState<{ type: "success" | "error", message: string } | null>(null);
+  const [pendingForm, setPendingForm] = useState<HTMLFormElement | null>(null);
 
   // Planet Spawning Logic (Keeping stars and planets)
   const springConfig = { damping: 50, stiffness: 100 };
@@ -36,14 +39,21 @@ export default function Home() {
 
   const basePath = process.env.NODE_ENV === "production" ? "/yosh" : "";
 
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     setMounted(true);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
     const timer = setTimeout(() => {
       setLoading(false);
     }, 2800);
     
     return () => {
       clearTimeout(timer);
+      window.removeEventListener("resize", checkMobile);
     };
   }, []);
 
@@ -124,17 +134,17 @@ export default function Home() {
 
         {/* Hero Section (AESTHETIC RESTORED) */}
         <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "60px", alignItems: "center" }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 0.8fr", gap: isMobile ? "40px" : "60px", alignItems: "center" }}>
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}>
               <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Strategic Operations & Systems</span>
               <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
-              <p className="subtitle" style={{ fontSize: "1.5rem", marginBottom: "32px" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong> and <strong>Executive Support</strong>.</p>
+              <p className="subtitle" style={{ marginBottom: "32px" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong> and <strong>Executive Support</strong>.</p>
               <div className="hero-buttons" style={{ display: "flex", gap: "16px", marginTop: "32px" }}>
-                <Link href="/resume.pdf" target="_blank" className="btn-primary" style={{ padding: "16px 32px", background: "white", color: "black", border: "none", borderRadius: "12px", fontWeight: "700", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flex: 1 }}>View Resume</Link>
-                <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ padding: "16px 32px", background: "rgba(255,255,255,0.05)", color: "white", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", fontWeight: "600", cursor: "pointer", backdropFilter: "blur(10px)", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>Partner with Me</button>
+                <Link href="/resume.pdf" target="_blank" className="btn-primary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "700", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flex: 1 }}>View Resume</Link>
+                <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "600", cursor: "pointer", backdropFilter: "blur(10px)", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>Partner with Me</button>
               </div>
             </motion.div>
-            <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative", order: isMobile ? -1 : 1 }}>
               <div className="float">
                 <div className="glass light-sweep" style={{ padding: "12px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.15)" }}>
                   <img src={`${basePath}/test-3.png`} alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
@@ -145,30 +155,60 @@ export default function Home() {
           </div>
         </section>
 
+
         {/* Technical Stack */}
-        <section id="expertise" className="section-container" style={{ height: "800px", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative" }}>
+        <section id="expertise" className="section-container" style={{ height: isMobile ? "auto" : "800px", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative", overflow: isMobile ? "hidden" : "visible" }}>
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <h2 style={{ fontSize: "2.5rem", marginBottom: "20px" }}>Technical Stack</h2>
-            <div style={{ width: "100%", height: "500px", position: "relative" }}>
-              <motion.div style={{ width: "100%", height: "100%", position: "absolute", rotateX, rotateY, perspective: "1000px", transformStyle: "preserve-3d", pointerEvents: "none" }}>
-                <svg style={{ position: "absolute", width: "100%", height: "100%", zIndex: 1 }}>
-                  {techStack.map(tech => tech.connections.map(targetId => {
-                    const target = techStack.find(t => t.id === targetId);
-                    return target ? <motion.line key={`${tech.id}-${targetId}`} x1={`${tech.x}%`} y1={`${tech.y}%`} x2={`${target.x}%`} y2={`${target.y}%`} stroke="rgba(255,255,255,0.25)" strokeWidth="1.2" animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 4, repeat: Infinity }} /> : null;
-                  }))}
-                </svg>
-                {techStack.map((tech, i) => (
-                  <ConstellationIcon key={tech.id} tech={tech} i={i} isHovered={hoveredId === tech.id} />
-                ))}
-              </motion.div>
-              <div style={{ width: "100%", height: "100%", position: "absolute", top: 0, left: 0, zIndex: 100 }}>
-                {techStack.map((tech) => (
-                  <div key={`sensor-${tech.id}`} onMouseEnter={() => setHoveredId(tech.id)} onMouseLeave={() => setHoveredId(null)} style={{ position: "absolute", left: `${tech.x}%`, top: `${tech.y}%`, width: "80px", height: "80px", transform: "translate(-50%, -50%)", cursor: "pointer", pointerEvents: "auto" }} />
-                ))}
+            <h2 style={{ fontSize: isMobile ? "2rem" : "2.5rem", marginBottom: isMobile ? "40px" : "20px" }}>Technical Stack</h2>
+            
+            {!isMobile ? (
+              <div style={{ width: "100%", height: "500px", position: "relative" }}>
+                <motion.div style={{ width: "100%", height: "100%", position: "absolute", rotateX, rotateY, perspective: "1000px", transformStyle: "preserve-3d", pointerEvents: "none" }}>
+                  <svg style={{ position: "absolute", width: "100%", height: "100%", zIndex: 1 }}>
+                    {techStack.map(tech => tech.connections.map(targetId => {
+                      const target = techStack.find(t => t.id === targetId);
+                      return target ? <motion.line key={`${tech.id}-${targetId}`} x1={`${tech.x}%`} y1={`${tech.y}%`} x2={`${target.x}%`} y2={`${target.y}%`} stroke="rgba(255,255,255,0.25)" strokeWidth="1.2" animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 4, repeat: Infinity }} /> : null;
+                    }))}
+                  </svg>
+                  {techStack.map((tech, i) => (
+                    <ConstellationIcon key={tech.id} tech={tech} i={i} isHovered={hoveredId === tech.id} />
+                  ))}
+                </motion.div>
+                <div style={{ width: "100%", height: "100%", position: "absolute", top: 0, left: 0, zIndex: 100 }}>
+                  {techStack.map((tech) => (
+                    <div key={`sensor-${tech.id}`} onMouseEnter={() => setHoveredId(tech.id)} onMouseLeave={() => setHoveredId(null)} style={{ position: "absolute", left: `${tech.x}%`, top: `${tech.y}%`, width: "80px", height: "80px", transform: "translate(-50%, -50%)", cursor: "pointer", pointerEvents: "auto" }} />
+                  ))}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div style={{ width: "100vw", marginLeft: "-20px", overflow: "hidden", position: "relative", padding: "40px 0" }}>
+                <motion.div 
+                  style={{ display: "flex", gap: "20px", width: "fit-content" }}
+                  animate={{ x: ["0%", "-50%"] }}
+                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                >
+                  {[...techStack, ...techStack].map((tech, i) => (
+                    <motion.div 
+                      key={`${tech.id}-${i}`}
+                      animate={{ y: [0, -15, 0] }}
+                      transition={{ duration: 3 + (i % 3), repeat: Infinity, ease: "easeInOut", delay: i * 0.1 }}
+                      style={{ 
+                        width: "100px", height: "100px", flexShrink: 0,
+                        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                        background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)",
+                        borderRadius: "20px", backdropFilter: "blur(10px)"
+                      }}
+                    >
+                      <img src={`https://api.iconify.design/simple-icons:${tech.icon}.svg?color=white`} style={{ width: "32px", height: "32px", marginBottom: "8px" }} alt={tech.name} />
+                      <span style={{ fontSize: "0.6rem", color: "white", opacity: 0.8, fontWeight: "600" }}>{tech.name}</span>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </div>
+            )}
           </motion.div>
         </section>
+
 
         {/* Strategic Capabilities */}
         <section id="capabilities" className="section-container">
@@ -242,7 +282,7 @@ export default function Home() {
         <section id="contact" className="section-container" style={{ paddingBottom: "160px" }}>
           <motion.div
             className="glass"
-            style={{ padding: "60px", borderRadius: "40px", border: "1px solid rgba(255, 255, 255, 0.3)", background: "rgba(255, 255, 255, 0.02)" }}
+            style={{ padding: isMobile ? "30px" : "60px", borderRadius: "40px", border: "1px solid rgba(255, 255, 255, 0.3)", background: "rgba(255, 255, 255, 0.02)" }}
             whileInView={{ opacity: 1, scale: 1 }}
             initial={{ opacity: 0, scale: 0.95 }}
             viewport={{ once: true }}
@@ -271,52 +311,38 @@ export default function Home() {
               {/* Right Pane: Contact Form */}
               <form
                 className="contact-form"
-                onSubmit={async (e) => {
+                onSubmit={(e) => {
                   e.preventDefault();
+                  const target = e.target as HTMLFormElement;
+                  const email = (target.elements.namedItem("email") as HTMLInputElement).value;
+
+                  // Owner Email Validation
+                  if (email.toLowerCase().trim() === "grldprz.yosh@gmail.com") {
+                    setNotification({ type: "error", message: "Sorry, you cannot use this email address." });
+                    setTimeout(() => setNotification(null), 5000);
+                    return;
+                  }
 
                   // Rate Limiting Logic (30 minutes)
                   const LAST_SUBMIT_KEY = "stark_cosmic_last_submit";
-                  const cooldown = 30 * 60 * 1000; // 30 minutes in ms
+                  const cooldown = 30 * 60 * 1000;
                   const lastSubmit = localStorage.getItem(LAST_SUBMIT_KEY);
 
                   if (lastSubmit) {
                     const timePassed = Date.now() - parseInt(lastSubmit);
                     if (timePassed < cooldown) {
                       const minutesLeft = Math.ceil((cooldown - timePassed) / 60000);
-                      setFormStatus({
+                      setNotification({
                         type: "error",
-                        message: `System cooldown active. Please wait ${minutesLeft} minutes before sending another message.`
+                        message: `System cooldown active. Please wait ${minutesLeft} minutes.`
                       });
+                      setTimeout(() => setNotification(null), 5000);
                       return;
                     }
                   }
 
-                  setIsSubmitting(true);
-                  setFormStatus(null);
-
-                  const target = e.target as HTMLFormElement;
-
-                  try {
-                    const result = await emailjs.sendForm(
-                      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "",
-                      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "",
-                      target,
-                      process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || ""
-                    );
-
-                    if (result.status === 200) {
-                      setFormStatus({ type: "success", message: "Message sent! I'll get back to you shortly." });
-                      localStorage.setItem(LAST_SUBMIT_KEY, Date.now().toString());
-                      target.reset();
-                    } else {
-                      setFormStatus({ type: "error", message: "Error sending message. Please try again." });
-                    }
-                  } catch (err) {
-                    console.error("EmailJS Error:", err);
-                    setFormStatus({ type: "error", message: "Network error. Please try again." });
-                  } finally {
-                    setIsSubmitting(false);
-                  }
+                  setPendingForm(target);
+                  setShowConfirmModal(true);
                 }}
               >
                 <div className="form-row">
@@ -343,16 +369,89 @@ export default function Home() {
                 <button type="submit" disabled={isSubmitting} className="submit-btn">
                   {isSubmitting ? "Sending Message..." : "Send Message"}
                 </button>
-
-                {formStatus && (
-                  <div className={`form-status ${formStatus.type === "success" ? "form-success" : "form-error"}`}>
-                    {formStatus.message}
-                  </div>
-                )}
               </form>
             </div>
           </motion.div>
         </section>
+
+        {/* Confirmation Modal */}
+        <AnimatePresence>
+          {showConfirmModal && (
+            <div className="modal-overlay">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                className="glass confirm-modal"
+              >
+                <h3 className="modal-title">Confirm Submission</h3>
+                <p className="modal-desc">Are you sure you want to send this inquiry? I'll get back to you as soon as possible.</p>
+                <div className="modal-actions">
+                  <button 
+                    onClick={() => setShowConfirmModal(false)} 
+                    className="btn-secondary" 
+                    style={{ flex: 1, padding: "14px", borderRadius: "12px" }}
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={async () => {
+                      if (!pendingForm) return;
+                      setShowConfirmModal(false);
+                      setIsSubmitting(true);
+
+                      try {
+                        const result = await emailjs.sendForm(
+                          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "",
+                          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "",
+                          pendingForm,
+                          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || ""
+                        );
+
+                        if (result.status === 200) {
+                          setNotification({ type: "success", message: "Message sent successfully!" });
+                          localStorage.setItem("stark_cosmic_last_submit", Date.now().toString());
+                          pendingForm.reset();
+                          setPendingForm(null);
+                        } else {
+                          setNotification({ type: "error", message: "Error sending message." });
+                        }
+                      } catch (err) {
+                        console.error("EmailJS Error:", err);
+                        setNotification({ type: "error", message: "Network error. Please try again." });
+                      } finally {
+                        setIsSubmitting(false);
+                        setTimeout(() => setNotification(null), 5000);
+                      }
+                    }} 
+                    className="btn-primary" 
+                    style={{ flex: 1, padding: "14px", borderRadius: "12px", background: "white", color: "black", border: "none", fontWeight: "700" }}
+                  >
+                    Confirm & Send
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* Global Notifications */}
+        <AnimatePresence>
+          {notification && (
+            <motion.div 
+              initial={{ opacity: 0, x: 50, y: isMobile ? 50 : 0 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.5 } }}
+              className={`notification-toast ${notification.type === "success" ? "form-success" : "form-error"}`}
+              style={{ paddingLeft: "16px", borderLeft: `4px solid ${notification.type === "success" ? "#4ade80" : "#ef4444"}` }}
+            >
+              <div style={{ fontSize: "0.9rem", letterSpacing: "0.05em", textTransform: "uppercase", fontWeight: "700" }}>
+                {notification.message}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
 
         <footer className="section-container" style={{ borderTop: "1px solid var(--glass-border)", padding: "40px 24px", color: "var(--text-secondary)", fontSize: "0.875rem", display: "flex", justifyContent: "space-between" }}>
           <p>© 2026 Gerald Perez</p>
