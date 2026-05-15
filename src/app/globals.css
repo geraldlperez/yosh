@@ -987,4 +987,22 @@ a {
     flex-direction: column;
   }
 }
+
+/* --- OPTIMIZED MOBILE WAVE ANIMATION --- */
+.mobile-wave {
+  animation: mobileWave 3s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+@keyframes mobileWave {
+  0%, 100% { transform: translateY(0) translateZ(0); }
+  50% { transform: translateY(-15px) translateZ(0); }
+}
+
+.mobile-wave-delay-0 { animation-delay: 0s; }
+.mobile-wave-delay-1 { animation-delay: 0.2s; }
+.mobile-wave-delay-2 { animation-delay: 0.4s; }
+.mobile-wave-delay-3 { animation-delay: 0.6s; }
+
 

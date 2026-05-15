@@ -188,20 +188,19 @@ export default function Home() {
                   transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
                 >
                   {[...techStack, ...techStack].map((tech, i) => (
-                    <motion.div 
+                    <div 
                       key={`${tech.id}-${i}`}
-                      animate={{ y: [0, -15, 0] }}
-                      transition={{ duration: 3 + (i % 3), repeat: Infinity, ease: "easeInOut", delay: i * 0.1 }}
+                      className={`mobile-wave mobile-wave-delay-${i % 4}`}
                       style={{ 
                         width: "100px", height: "100px", flexShrink: 0,
                         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                        background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)",
-                        borderRadius: "20px", backdropFilter: "blur(10px)"
+                        background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.1)",
+                        borderRadius: "20px"
                       }}
                     >
                       <img src={`https://api.iconify.design/simple-icons:${tech.icon}.svg?color=white`} style={{ width: "32px", height: "32px", marginBottom: "8px" }} alt={tech.name} />
                       <span style={{ fontSize: "0.6rem", color: "white", opacity: 0.8, fontWeight: "600" }}>{tech.name}</span>
-                    </motion.div>
+                    </div>
                   ))}
                 </motion.div>
               </div>
@@ -467,7 +466,7 @@ export default function Home() {
       <div className="precision-sidebar">
         <Link href="#top" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#top")}>
           <span className="sidebar-tooltip">Top</span>
-          <img src={`${basePath}/logo.png`} className="sidebar-icon" alt="Home" style={{ borderRadius: "50%" }} />
+          <img src="https://api.iconify.design/lucide:home.svg?color=white" className="sidebar-icon" alt="Home" />
         </Link>
         <Link href="#expertise" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#expertise")}>
           <span className="sidebar-tooltip">Expertise</span>
