@@ -27,19 +27,19 @@ export const creativeProjects: CreativeProject[] = [
   {
     id: "creative-4",
     title: "Y2K / Neo-Grit",
-    category: "Social Media Marketing",
-    image: "/creative/sample.jpg",
+    category: "Trend-Driven Social Creative",
+    image: "/creative/creative-4.png",
   },
   {
     id: "creative-5",
     title: "High-Fashion Editorial",
     category: "Brand Lookbook & Digital Editorial",
-    image: "/creative/sample.jpg",
+    image: "/creative/creative-5.png",
   },
   {
     id: "creative-6",
-    title: "Data-Visual / Infographic",
-    category: "Visual Content Strategy & Design",
-    image: "/creative/sample.jpg",
+    title: "Surrealism",
+    category: "Creative Campaign & Key Visuals",
+    image: "/creative/creative-6.png",
   },
 ];
