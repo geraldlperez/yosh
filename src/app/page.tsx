@@ -50,7 +50,7 @@ export default function Home() {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 2800);
-    
+
     return () => {
       clearTimeout(timer);
       window.removeEventListener("resize", checkMobile);
@@ -73,7 +73,7 @@ export default function Home() {
     <main id="top" style={{ position: "relative", minHeight: "100vh" }}>
       <AnimatePresence>
         {loading && (
-          <motion.div 
+          <motion.div
             key="preloader"
             exit={{ opacity: 0, scale: 1.1 }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
@@ -90,377 +90,377 @@ export default function Home() {
 
       <div style={{ opacity: loading ? 0 : 1, transition: "opacity 1.5s ease" }}>
 
-      {/* --- Cosmic Background Layer --- */}
-      <div className="galaxy-bg" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, background: "#020205", overflow: "hidden" }}>
+        {/* --- Cosmic Background Layer --- */}
+        <div className="galaxy-bg" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, background: "#020205", overflow: "hidden" }}>
 
-        {/* Nebula Mist */}
-        <motion.div style={{ x: nebulaX, y: nebulaY, width: "100%", height: "100%" }}>
-          <div className="nebula" style={{ top: "-5%", left: "-5%" }} />
-          <div className="nebula" style={{ bottom: "-5%", right: "-5%" }} />
-        </motion.div>
+          {/* Nebula Mist */}
+          <motion.div style={{ x: nebulaX, y: nebulaY, width: "100%", height: "100%" }}>
+            <div className="nebula" style={{ top: "-5%", left: "-5%" }} />
+            <div className="nebula" style={{ bottom: "-5%", right: "-5%" }} />
+          </motion.div>
 
-        {/* Razor Omni-Stars */}
-        <motion.div style={{ x: starX, y: starY }} className="stars-container">
-          {mounted && [...Array(120)].map((_, i) => (
-            <div key={i} className="star-dot" style={{ top: `${(i * 23.7) % 100}%`, left: `${(i * 17.3) % 100}%`, width: i % 10 === 0 ? "2px" : "1px", height: i % 10 === 0 ? "2px" : "1px", "--duration": `${2 + (i % 6)}s` } as any} />
-          ))}
+          {/* Razor Omni-Stars */}
+          <motion.div style={{ x: starX, y: starY }} className="stars-container">
+            {mounted && [...Array(120)].map((_, i) => (
+              <div key={i} className="star-dot" style={{ top: `${(i * 23.7) % 100}%`, left: `${(i * 17.3) % 100}%`, width: i % 10 === 0 ? "2px" : "1px", height: i % 10 === 0 ? "2px" : "1px", "--duration": `${2 + (i % 6)}s` } as any} />
+            ))}
 
-          {mounted && [...Array(10)].map((_, i) => {
-            const edge = i % 4;
-            let top = "0%", left = "0%", rotate = 0;
-            if (edge === 0) { top = `${Math.random() * 100}%`; left = "-10%"; rotate = -30 + Math.random() * 60; }
-            else if (edge === 1) { top = "-10%"; left = `${Math.random() * 100}%`; rotate = 60 + Math.random() * 60; }
-            else if (edge === 2) { top = `${Math.random() * 100}%`; left = "110%"; rotate = 150 + Math.random() * 60; }
-            else { top = "110%"; left = `${Math.random() * 100}%`; rotate = 240 + Math.random() * 60; }
+            {mounted && [...Array(10)].map((_, i) => {
+              const edge = i % 4;
+              let top = "0%", left = "0%", rotate = 0;
+              if (edge === 0) { top = `${Math.random() * 100}%`; left = "-10%"; rotate = -30 + Math.random() * 60; }
+              else if (edge === 1) { top = "-10%"; left = `${Math.random() * 100}%`; rotate = 60 + Math.random() * 60; }
+              else if (edge === 2) { top = `${Math.random() * 100}%`; left = "110%"; rotate = 150 + Math.random() * 60; }
+              else { top = "110%"; left = `${Math.random() * 100}%`; rotate = 240 + Math.random() * 60; }
 
-            return (
-              <div key={`star-rhythm-${i}`} style={{ position: "absolute", top, left, transform: `rotate(${rotate}deg)`, pointerEvents: "none" }}>
-                <div className="shooting-star" style={{ "--duration": "60s", "--delay": `${i * 6}s` } as any} />
-              </div>
-            );
-          })}
-        </motion.div>
-
-        <motion.div
-          className="planet"
-          style={{ top: "15%", right: "8%", x: useSpring(useTransform(mouseX, [0, 2000], [15, -15]), springConfig), y: useSpring(useTransform(mouseY, [0, 1000], [15, -15]), springConfig) }}
-          animate={{ rotate: 360, y: [0, 20, 0] }}
-          transition={{ rotate: { duration: 300, repeat: Infinity, ease: "linear" }, y: { duration: 30, repeat: Infinity, ease: "easeInOut" } }}
-        />
-      </div>
-
-      <div style={{ position: "relative", zIndex: 10 }}>
-        <div className="noise" />
-
-        {/* Hero Section (AESTHETIC RESTORED) */}
-        <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 0.8fr", gap: isMobile ? "40px" : "60px", alignItems: "center" }}>
-            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}>
-              <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>AI Automation Specialist & Technical VA | Web Dev & Digital Marketing</span>
-              <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
-              <p className="subtitle" style={{ marginBottom: "32px" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong>, <strong>AI Automation</strong>, and <strong>Digital Growth</strong>.</p>
-              <div className="hero-buttons" style={{ display: "flex", gap: "16px", marginTop: "32px" }}>
-                <Link href="/resume.pdf" target="_blank" className="btn-primary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "700", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flex: 1 }}>View Resume</Link>
-                <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "600", cursor: "pointer", backdropFilter: "blur(10px)", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>Partner with Me</button>
-              </div>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
-              <div className="float">
-                <div className="glass light-sweep" style={{ padding: "12px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.15)" }}>
-                  <img src={`${basePath}/test-3.png`} alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
+              return (
+                <div key={`star-rhythm-${i}`} style={{ position: "absolute", top, left, transform: `rotate(${rotate}deg)`, pointerEvents: "none" }}>
+                  <div className="shooting-star" style={{ "--duration": "60s", "--delay": `${i * 6}s` } as any} />
                 </div>
-              </div>
-              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "140%", height: "140%", background: "radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%)", zIndex: 1 }} />
-            </motion.div>
-          </div>
-        </section>
-
-
-        {/* Technical Stack */}
-        <section id="expertise" className="section-container" style={{ height: isMobile ? "auto" : "800px", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative", overflow: isMobile ? "hidden" : "visible" }}>
-          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <h2 style={{ fontSize: isMobile ? "2rem" : "2.5rem", marginBottom: isMobile ? "40px" : "20px" }}>Technical Stack</h2>
-            
-            {!isMobile ? (
-              <div style={{ width: "100%", height: "500px", position: "relative" }}>
-                <motion.div style={{ width: "100%", height: "100%", position: "absolute", rotateX, rotateY, perspective: "1000px", transformStyle: "preserve-3d", pointerEvents: "none" }}>
-                  <svg style={{ position: "absolute", width: "100%", height: "100%", zIndex: 1 }}>
-                    {techStack.map(tech => tech.connections.map(targetId => {
-                      const target = techStack.find(t => t.id === targetId);
-                      return target ? <motion.line key={`${tech.id}-${targetId}`} x1={`${tech.x}%`} y1={`${tech.y}%`} x2={`${target.x}%`} y2={`${target.y}%`} stroke="rgba(255,255,255,0.25)" strokeWidth="1.2" animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 4, repeat: Infinity }} /> : null;
-                    }))}
-                  </svg>
-                  {techStack.map((tech, i) => (
-                    <ConstellationIcon key={tech.id} tech={tech} i={i} isHovered={hoveredId === tech.id} />
-                  ))}
-                </motion.div>
-                <div style={{ width: "100%", height: "100%", position: "absolute", top: 0, left: 0, zIndex: 100 }}>
-                  {techStack.map((tech) => (
-                    <div key={`sensor-${tech.id}`} onMouseEnter={() => setHoveredId(tech.id)} onMouseLeave={() => setHoveredId(null)} style={{ position: "absolute", left: `${tech.x}%`, top: `${tech.y}%`, width: "80px", height: "80px", transform: "translate(-50%, -50%)", cursor: "pointer", pointerEvents: "auto" }} />
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div style={{ width: "100vw", marginLeft: "-20px", overflow: "hidden", position: "relative", padding: "40px 0" }}>
-                <motion.div 
-                  style={{ display: "flex", gap: "20px", width: "fit-content" }}
-                  animate={{ x: ["0%", "-50%"] }}
-                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                >
-                  {[...techStack, ...techStack].map((tech, i) => (
-                    <div 
-                      key={`${tech.id}-${i}`}
-                      className={`mobile-wave mobile-wave-delay-${i % 4}`}
-                      style={{ 
-                        width: "100px", height: "100px", flexShrink: 0,
-                        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                        background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.1)",
-                        borderRadius: "20px"
-                      }}
-                    >
-                      <img src={`https://api.iconify.design/simple-icons:${tech.icon}.svg?color=white`} style={{ width: "32px", height: "32px", marginBottom: "8px" }} alt={tech.name} />
-                      <span style={{ fontSize: "0.6rem", color: "white", opacity: 0.8, fontWeight: "600" }}>{tech.name}</span>
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
-            )}
+              );
+            })}
           </motion.div>
-        </section>
 
-
-        {/* Strategic Capabilities */}
-        <section id="capabilities" className="section-container">
-          <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Strategic Capabilities</h2>
-          <div className="bento-grid">
-            <motion.div className="glass bento-item" style={{ gridColumn: "span 2", background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 100%)" }} whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Web Development</h4>
-              <p style={{ color: "var(--text-secondary)" }}>Engineering systems using React, TypeScript, and modern API architectures.</p>
-            </motion.div>
-            <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Automation</h4>
-              <p style={{ color: "var(--text-secondary)" }}>Architecting complex workflows to scale virtual operations.</p>
-            </motion.div>
-            <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Digital Marketing</h4>
-              <p style={{ color: "var(--text-secondary)" }}>Designing high-converting campaigns, funnel optimization, and growth strategy.</p>
-            </motion.div>
-            <motion.div className="glass bento-item" style={{ background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 100%)" }} whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Technical VA Services</h4>
-              <p style={{ color: "var(--text-secondary)" }}>High-impact administrative support, day-to-day execution, and systems organization.</p>
-            </motion.div>
-            <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>AI Engineering</h4>
-              <p style={{ color: "var(--text-secondary)" }}>Developing custom AI solutions and prompt engineering for automation.</p>
-            </motion.div>
-            <motion.div className="glass bento-item" style={{ gridColumn: "span 3" }} whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Technical Partnership</h4>
-              <p style={{ color: "var(--text-secondary)" }}>End-to-end technical expertise supporting founders in building, scaling, and optimizing day-to-day operations.</p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Projects */}
-        <section id="projects" className="section-container">
-          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Projects</h2>
-            <div className="projects-grid">
-              {[...projects].reverse().map((project) => (
-                <ProjectCard key={project.id} project={project} basePath={basePath} onExpand={(index) => setActiveLightbox({ projectId: project.id, index })} />
-              ))}
-            </div>
-          </motion.div>
-        </section>
-
-        {/* Visual Studio (3 PER ROW, POSTER SIZE, NO SWEEP) */}
-        <section id="creative" className="section-container">
-          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <h2 style={{ fontSize: "2.5rem", marginBottom: "20px" }}>Creative</h2>
-            <div className="creative-grid">
-              {creativeProjects.map((item) => (
-                <motion.div
-                  key={item.id}
-                  className="creative-item"
-                  onClick={() => setActiveLightbox({ projectId: item.id, index: 0 })}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                >
-                  <img src={`${basePath}${item.image}`} alt={item.title} />
-                  <div className="creative-overlay">
-                    <span className="creative-category">{item.category}</span>
-                    <h3 className="creative-title">{item.title}</h3>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </section>
-
-        {/* Contact */}
-        <section id="contact" className="section-container" style={{ paddingBottom: "160px" }}>
           <motion.div
-            className="glass"
-            style={{ padding: isMobile ? "30px" : "60px", borderRadius: "40px", border: "1px solid rgba(255, 255, 255, 0.3)", background: "rgba(255, 255, 255, 0.02)" }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            initial={{ opacity: 0, scale: 0.95 }}
-            viewport={{ once: true }}
-          >
-            <div className="contact-grid">
-              {/* Left Pane: Professional Context */}
-              <div>
-                <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Available for Partnership</span>
-                <h2 className="hero-title" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", marginTop: "16px", marginBottom: "24px" }}>Let's <span className="gradient-text">Connect</span></h2>
-                <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem", lineHeight: "1.6", marginBottom: "40px" }}>
-                  I help high-growth teams and founders bridge the gap between complex systems and executive support. Whether you need an AI-driven workflow, a custom web solution, or targeted digital marketing—let's discuss how we can scale your operations.
-                </p>
+            className="planet"
+            style={{ top: "15%", right: "8%", x: useSpring(useTransform(mouseX, [0, 2000], [15, -15]), springConfig), y: useSpring(useTransform(mouseY, [0, 1000], [15, -15]), springConfig) }}
+            animate={{ rotate: 360, y: [0, 20, 0] }}
+            transition={{ rotate: { duration: 300, repeat: Infinity, ease: "linear" }, y: { duration: 30, repeat: Infinity, ease: "easeInOut" } }}
+          />
+        </div>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "white", opacity: 0.8 }}>
-                    <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>✉️</div>
-                    <span>grldprz.yosh@gmail.com</span>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "white", opacity: 0.8 }}>
-                    <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>🔗</div>
-                    <span>linkedin.com/in/geraldperez</span>
+        <div style={{ position: "relative", zIndex: 10 }}>
+          <div className="noise" />
+
+          {/* Hero Section (AESTHETIC RESTORED) */}
+          <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 0.8fr", gap: isMobile ? "40px" : "60px", alignItems: "center" }}>
+              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}>
+                <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>AI Automation Specialist & Technical VA | Web Dev & Digital Marketing</span>
+                <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
+                <p className="subtitle" style={{ marginBottom: "32px" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong>, <strong>AI Automation</strong>, and <strong>Digital Growth</strong>.</p>
+                <div className="hero-buttons" style={{ display: "flex", gap: "16px", marginTop: "32px" }}>
+                  <Link href="/cv.pdf" target="_blank" className="btn-primary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "700", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flex: 1 }}>View Resume</Link>
+                  <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "600", cursor: "pointer", backdropFilter: "blur(10px)", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>Partner with Me</button>
+                </div>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
+                <div className="float">
+                  <div className="glass light-sweep" style={{ padding: "12px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.15)" }}>
+                    <img src={`${basePath}/test-3.png`} alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
                   </div>
                 </div>
+                <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "140%", height: "140%", background: "radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%)", zIndex: 1 }} />
+              </motion.div>
+            </div>
+          </section>
+
+
+          {/* Technical Stack */}
+          <section id="expertise" className="section-container" style={{ height: isMobile ? "auto" : "800px", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative", overflow: isMobile ? "hidden" : "visible" }}>
+            <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+              <h2 style={{ fontSize: isMobile ? "2rem" : "2.5rem", marginBottom: isMobile ? "40px" : "20px" }}>Technical Stack</h2>
+
+              {!isMobile ? (
+                <div style={{ width: "100%", height: "500px", position: "relative" }}>
+                  <motion.div style={{ width: "100%", height: "100%", position: "absolute", rotateX, rotateY, perspective: "1000px", transformStyle: "preserve-3d", pointerEvents: "none" }}>
+                    <svg style={{ position: "absolute", width: "100%", height: "100%", zIndex: 1 }}>
+                      {techStack.map(tech => tech.connections.map(targetId => {
+                        const target = techStack.find(t => t.id === targetId);
+                        return target ? <motion.line key={`${tech.id}-${targetId}`} x1={`${tech.x}%`} y1={`${tech.y}%`} x2={`${target.x}%`} y2={`${target.y}%`} stroke="rgba(255,255,255,0.25)" strokeWidth="1.2" animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 4, repeat: Infinity }} /> : null;
+                      }))}
+                    </svg>
+                    {techStack.map((tech, i) => (
+                      <ConstellationIcon key={tech.id} tech={tech} i={i} isHovered={hoveredId === tech.id} />
+                    ))}
+                  </motion.div>
+                  <div style={{ width: "100%", height: "100%", position: "absolute", top: 0, left: 0, zIndex: 100 }}>
+                    {techStack.map((tech) => (
+                      <div key={`sensor-${tech.id}`} onMouseEnter={() => setHoveredId(tech.id)} onMouseLeave={() => setHoveredId(null)} style={{ position: "absolute", left: `${tech.x}%`, top: `${tech.y}%`, width: "80px", height: "80px", transform: "translate(-50%, -50%)", cursor: "pointer", pointerEvents: "auto" }} />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div style={{ width: "100vw", marginLeft: "-20px", overflow: "hidden", position: "relative", padding: "40px 0" }}>
+                  <motion.div
+                    style={{ display: "flex", gap: "20px", width: "fit-content" }}
+                    animate={{ x: ["0%", "-50%"] }}
+                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  >
+                    {[...techStack, ...techStack].map((tech, i) => (
+                      <div
+                        key={`${tech.id}-${i}`}
+                        className={`mobile-wave mobile-wave-delay-${i % 4}`}
+                        style={{
+                          width: "100px", height: "100px", flexShrink: 0,
+                          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                          background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.1)",
+                          borderRadius: "20px"
+                        }}
+                      >
+                        <img src={`https://api.iconify.design/simple-icons:${tech.icon}.svg?color=white`} style={{ width: "32px", height: "32px", marginBottom: "8px" }} alt={tech.name} />
+                        <span style={{ fontSize: "0.6rem", color: "white", opacity: 0.8, fontWeight: "600" }}>{tech.name}</span>
+                      </div>
+                    ))}
+                  </motion.div>
+                </div>
+              )}
+            </motion.div>
+          </section>
+
+
+          {/* Strategic Capabilities */}
+          <section id="capabilities" className="section-container">
+            <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Strategic Capabilities</h2>
+            <div className="bento-grid">
+              <motion.div className="glass bento-item" style={{ gridColumn: "span 2", background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 100%)" }} whileHover={{ scale: 1.02 }}>
+                <h4 style={{ fontSize: "1.25rem", color: "white" }}>Web Development</h4>
+                <p style={{ color: "var(--text-secondary)" }}>Engineering systems using React, TypeScript, and modern API architectures.</p>
+              </motion.div>
+              <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
+                <h4 style={{ fontSize: "1.25rem", color: "white" }}>Automation</h4>
+                <p style={{ color: "var(--text-secondary)" }}>Architecting complex workflows to scale virtual operations.</p>
+              </motion.div>
+              <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
+                <h4 style={{ fontSize: "1.25rem", color: "white" }}>Digital Marketing</h4>
+                <p style={{ color: "var(--text-secondary)" }}>Designing high-converting campaigns, funnel optimization, and growth strategy.</p>
+              </motion.div>
+              <motion.div className="glass bento-item" style={{ background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 100%)" }} whileHover={{ scale: 1.02 }}>
+                <h4 style={{ fontSize: "1.25rem", color: "white" }}>Technical VA Services</h4>
+                <p style={{ color: "var(--text-secondary)" }}>High-impact administrative support, day-to-day execution, and systems organization.</p>
+              </motion.div>
+              <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
+                <h4 style={{ fontSize: "1.25rem", color: "white" }}>AI Engineering</h4>
+                <p style={{ color: "var(--text-secondary)" }}>Developing custom AI solutions and prompt engineering for automation.</p>
+              </motion.div>
+              <motion.div className="glass bento-item" style={{ gridColumn: "span 3" }} whileHover={{ scale: 1.02 }}>
+                <h4 style={{ fontSize: "1.25rem", color: "white" }}>Technical Partnership</h4>
+                <p style={{ color: "var(--text-secondary)" }}>End-to-end technical expertise supporting founders in building, scaling, and optimizing day-to-day operations.</p>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* Projects */}
+          <section id="projects" className="section-container">
+            <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+              <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Projects</h2>
+              <div className="projects-grid">
+                {[...projects].reverse().map((project) => (
+                  <ProjectCard key={project.id} project={project} basePath={basePath} onExpand={(index) => setActiveLightbox({ projectId: project.id, index })} />
+                ))}
               </div>
+            </motion.div>
+          </section>
 
-              {/* Right Pane: Contact Form */}
-              <form
-                className="contact-form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const target = e.target as HTMLFormElement;
-                  const email = (target.elements.namedItem("email") as HTMLInputElement).value;
+          {/* Visual Studio (3 PER ROW, POSTER SIZE, NO SWEEP) */}
+          <section id="creative" className="section-container">
+            <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+              <h2 style={{ fontSize: "2.5rem", marginBottom: "20px" }}>Creative</h2>
+              <div className="creative-grid">
+                {creativeProjects.map((item) => (
+                  <motion.div
+                    key={item.id}
+                    className="creative-item"
+                    onClick={() => setActiveLightbox({ projectId: item.id, index: 0 })}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                  >
+                    <img src={`${basePath}${item.image}`} alt={item.title} />
+                    <div className="creative-overlay">
+                      <span className="creative-category">{item.category}</span>
+                      <h3 className="creative-title">{item.title}</h3>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </section>
 
-                  // Owner Email Validation
-                  if (email.toLowerCase().trim() === "grldprz.yosh@gmail.com") {
-                    setNotification({ type: "error", message: "Sorry, you cannot use this email address." });
-                    setTimeout(() => setNotification(null), 5000);
-                    return;
-                  }
+          {/* Contact */}
+          <section id="contact" className="section-container" style={{ paddingBottom: "160px" }}>
+            <motion.div
+              className="glass"
+              style={{ padding: isMobile ? "30px" : "60px", borderRadius: "40px", border: "1px solid rgba(255, 255, 255, 0.3)", background: "rgba(255, 255, 255, 0.02)" }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              viewport={{ once: true }}
+            >
+              <div className="contact-grid">
+                {/* Left Pane: Professional Context */}
+                <div>
+                  <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Available for Partnership</span>
+                  <h2 className="hero-title" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", marginTop: "16px", marginBottom: "24px" }}>Let's <span className="gradient-text">Connect</span></h2>
+                  <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem", lineHeight: "1.6", marginBottom: "40px" }}>
+                    I help high-growth teams and founders bridge the gap between complex systems and executive support. Whether you need an AI-driven workflow, a custom web solution, or targeted digital marketing—let's discuss how we can scale your operations.
+                  </p>
 
-                  // Rate Limiting Logic (30 minutes)
-                  const LAST_SUBMIT_KEY = "stark_cosmic_last_submit";
-                  const cooldown = 30 * 60 * 1000;
-                  const lastSubmit = localStorage.getItem(LAST_SUBMIT_KEY);
+                  <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "white", opacity: 0.8 }}>
+                      <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>✉️</div>
+                      <span>grldprz.yosh@gmail.com</span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "white", opacity: 0.8 }}>
+                      <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>🔗</div>
+                      <span>linkedin.com/in/geraldperez</span>
+                    </div>
+                  </div>
+                </div>
 
-                  if (lastSubmit) {
-                    const timePassed = Date.now() - parseInt(lastSubmit);
-                    if (timePassed < cooldown) {
-                      const minutesLeft = Math.ceil((cooldown - timePassed) / 60000);
-                      setNotification({
-                        type: "error",
-                        message: `System cooldown active. Please wait ${minutesLeft} minutes.`
-                      });
+                {/* Right Pane: Contact Form */}
+                <form
+                  className="contact-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const target = e.target as HTMLFormElement;
+                    const email = (target.elements.namedItem("email") as HTMLInputElement).value;
+
+                    // Owner Email Validation
+                    if (email.toLowerCase().trim() === "grldprz.yosh@gmail.com") {
+                      setNotification({ type: "error", message: "Sorry, you cannot use this email address." });
                       setTimeout(() => setNotification(null), 5000);
                       return;
                     }
-                  }
 
-                  setPendingForm(target);
-                  setShowConfirmModal(true);
-                }}
-              >
-                <div className="form-row">
-                  <div className="input-group">
-                    <label className="input-label">First Name</label>
-                    <input name="first_name" type="text" placeholder="Yoshi" required className="input-field" />
-                  </div>
-                  <div className="input-group">
-                    <label className="input-label">Last Name</label>
-                    <input name="last_name" type="text" placeholder="Tsukino" required className="input-field" />
-                  </div>
-                </div>
+                    // Rate Limiting Logic (30 minutes)
+                    const LAST_SUBMIT_KEY = "stark_cosmic_last_submit";
+                    const cooldown = 30 * 60 * 1000;
+                    const lastSubmit = localStorage.getItem(LAST_SUBMIT_KEY);
 
-                <div className="input-group">
-                  <label className="input-label">Email Address</label>
-                  <input name="email" type="email" placeholder="yoshitsukino@example.com" required className="input-field" />
-                </div>
-
-                <div className="input-group">
-                  <label className="input-label">How can I help you?</label>
-                  <textarea name="message" placeholder="Describe your project or needs..." required className="textarea-field" />
-                </div>
-
-                <button type="submit" disabled={isSubmitting} className="submit-btn">
-                  {isSubmitting ? "Sending Message..." : "Send Message"}
-                </button>
-              </form>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* Confirmation Modal */}
-        <AnimatePresence>
-          {showConfirmModal && (
-            <div className="modal-overlay">
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="glass confirm-modal"
-              >
-                <h3 className="modal-title">Confirm Submission</h3>
-                <p className="modal-desc">Are you sure you want to send this inquiry? I'll get back to you as soon as possible.</p>
-                <div className="modal-actions">
-                  <button 
-                    onClick={() => setShowConfirmModal(false)} 
-                    className="btn-secondary" 
-                    style={{ flex: 1, padding: "14px", borderRadius: "12px" }}
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    onClick={async () => {
-                      if (!pendingForm) return;
-                      setShowConfirmModal(false);
-                      setIsSubmitting(true);
-
-                      try {
-                        const result = await emailjs.sendForm(
-                          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "",
-                          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "",
-                          pendingForm,
-                          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || ""
-                        );
-
-                        if (result.status === 200) {
-                          setNotification({ type: "success", message: "Message sent successfully!" });
-                          localStorage.setItem("stark_cosmic_last_submit", Date.now().toString());
-                          pendingForm.reset();
-                          setPendingForm(null);
-                        } else {
-                          setNotification({ type: "error", message: "Error sending message." });
-                        }
-                      } catch (err) {
-                        console.error("EmailJS Error:", err);
-                        setNotification({ type: "error", message: "Network error. Please try again." });
-                      } finally {
-                        setIsSubmitting(false);
+                    if (lastSubmit) {
+                      const timePassed = Date.now() - parseInt(lastSubmit);
+                      if (timePassed < cooldown) {
+                        const minutesLeft = Math.ceil((cooldown - timePassed) / 60000);
+                        setNotification({
+                          type: "error",
+                          message: `System cooldown active. Please wait ${minutesLeft} minutes.`
+                        });
                         setTimeout(() => setNotification(null), 5000);
+                        return;
                       }
-                    }} 
-                    className="btn-primary" 
-                    style={{ flex: 1, padding: "14px", borderRadius: "12px", background: "white", color: "black", border: "none", fontWeight: "700" }}
-                  >
-                    Confirm & Send
-                  </button>
-                </div>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
+                    }
 
-        {/* Global Notifications */}
-        <AnimatePresence>
-          {notification && (
-            <motion.div 
-              initial={{ opacity: 0, x: 50, y: isMobile ? 50 : 0 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.5 } }}
-              className={`notification-toast ${notification.type === "success" ? "form-success" : "form-error"}`}
-              style={{ paddingLeft: "16px", borderLeft: `4px solid ${notification.type === "success" ? "#4ade80" : "#ef4444"}` }}
-            >
-              <div style={{ fontSize: "0.9rem", letterSpacing: "0.05em", textTransform: "uppercase", fontWeight: "700" }}>
-                {notification.message}
+                    setPendingForm(target);
+                    setShowConfirmModal(true);
+                  }}
+                >
+                  <div className="form-row">
+                    <div className="input-group">
+                      <label className="input-label">First Name</label>
+                      <input name="first_name" type="text" placeholder="Yoshi" required className="input-field" />
+                    </div>
+                    <div className="input-group">
+                      <label className="input-label">Last Name</label>
+                      <input name="last_name" type="text" placeholder="Tsukino" required className="input-field" />
+                    </div>
+                  </div>
+
+                  <div className="input-group">
+                    <label className="input-label">Email Address</label>
+                    <input name="email" type="email" placeholder="yoshitsukino@example.com" required className="input-field" />
+                  </div>
+
+                  <div className="input-group">
+                    <label className="input-label">How can I help you?</label>
+                    <textarea name="message" placeholder="Describe your project or needs..." required className="textarea-field" />
+                  </div>
+
+                  <button type="submit" disabled={isSubmitting} className="submit-btn">
+                    {isSubmitting ? "Sending Message..." : "Send Message"}
+                  </button>
+                </form>
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
+          </section>
+
+          {/* Confirmation Modal */}
+          <AnimatePresence>
+            {showConfirmModal && (
+              <div className="modal-overlay">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                  className="glass confirm-modal"
+                >
+                  <h3 className="modal-title">Confirm Submission</h3>
+                  <p className="modal-desc">Are you sure you want to send this inquiry? I'll get back to you as soon as possible.</p>
+                  <div className="modal-actions">
+                    <button
+                      onClick={() => setShowConfirmModal(false)}
+                      className="btn-secondary"
+                      style={{ flex: 1, padding: "14px", borderRadius: "12px" }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={async () => {
+                        if (!pendingForm) return;
+                        setShowConfirmModal(false);
+                        setIsSubmitting(true);
+
+                        try {
+                          const result = await emailjs.sendForm(
+                            process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "",
+                            process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "",
+                            pendingForm,
+                            process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || ""
+                          );
+
+                          if (result.status === 200) {
+                            setNotification({ type: "success", message: "Message sent successfully!" });
+                            localStorage.setItem("stark_cosmic_last_submit", Date.now().toString());
+                            pendingForm.reset();
+                            setPendingForm(null);
+                          } else {
+                            setNotification({ type: "error", message: "Error sending message." });
+                          }
+                        } catch (err) {
+                          console.error("EmailJS Error:", err);
+                          setNotification({ type: "error", message: "Network error. Please try again." });
+                        } finally {
+                          setIsSubmitting(false);
+                          setTimeout(() => setNotification(null), 5000);
+                        }
+                      }}
+                      className="btn-primary"
+                      style={{ flex: 1, padding: "14px", borderRadius: "12px", background: "white", color: "black", border: "none", fontWeight: "700" }}
+                    >
+                      Confirm & Send
+                    </button>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
+
+          {/* Global Notifications */}
+          <AnimatePresence>
+            {notification && (
+              <motion.div
+                initial={{ opacity: 0, x: 50, y: isMobile ? 50 : 0 }}
+                animate={{ opacity: 1, x: 0, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.5 } }}
+                className={`notification-toast ${notification.type === "success" ? "form-success" : "form-error"}`}
+                style={{ paddingLeft: "16px", borderLeft: `4px solid ${notification.type === "success" ? "#4ade80" : "#ef4444"}` }}
+              >
+                <div style={{ fontSize: "0.9rem", letterSpacing: "0.05em", textTransform: "uppercase", fontWeight: "700" }}>
+                  {notification.message}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
 
-        <footer className="section-container" style={{ borderTop: "1px solid var(--glass-border)", padding: "40px 24px", color: "var(--text-secondary)", fontSize: "0.875rem", display: "flex", justifyContent: "space-between" }}>
-          <p>© 2026 Gerald Perez</p>
-          <div style={{ display: "flex", gap: "24px" }}>
-            <Link href="https://linkedin.com" target="_blank" className="hover-text">LinkedIn</Link>
-            <Link href="https://github.com" target="_blank" className="hover-text">GitHub</Link>
-          </div>
-        </footer>
+          <footer className="section-container" style={{ borderTop: "1px solid var(--glass-border)", padding: "40px 24px", color: "var(--text-secondary)", fontSize: "0.875rem", display: "flex", justifyContent: "space-between" }}>
+            <p>© 2026 Gerald Perez</p>
+            <div style={{ display: "flex", gap: "24px" }}>
+              <Link href="https://linkedin.com" target="_blank" className="hover-text">LinkedIn</Link>
+              <Link href="https://github.com" target="_blank" className="hover-text">GitHub</Link>
+            </div>
+          </footer>
+        </div>
       </div>
-    </div>
 
       {/* Precision Sidebar (Right) */}
       <div className="precision-sidebar">
