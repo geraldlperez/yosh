@@ -136,15 +136,15 @@ export default function Home() {
         <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 0.8fr", gap: isMobile ? "40px" : "60px", alignItems: "center" }}>
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}>
-              <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Strategic Operations & Systems</span>
+              <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>AI Automation Specialist & Technical VA | Web Dev & Digital Marketing</span>
               <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
-              <p className="subtitle" style={{ marginBottom: "32px" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong> and <strong>Executive Support</strong>.</p>
+              <p className="subtitle" style={{ marginBottom: "32px" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong>, <strong>AI Automation</strong>, and <strong>Digital Growth</strong>.</p>
               <div className="hero-buttons" style={{ display: "flex", gap: "16px", marginTop: "32px" }}>
                 <Link href="/resume.pdf" target="_blank" className="btn-primary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "700", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flex: 1 }}>View Resume</Link>
                 <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "600", cursor: "pointer", backdropFilter: "blur(10px)", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>Partner with Me</button>
               </div>
             </motion.div>
-            <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative", order: isMobile ? -1 : 1 }}>
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
               <div className="float">
                 <div className="glass light-sweep" style={{ padding: "12px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.15)" }}>
                   <img src={`${basePath}/test-3.png`} alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
@@ -222,12 +222,12 @@ export default function Home() {
               <p style={{ color: "var(--text-secondary)" }}>Architecting complex workflows to scale virtual operations.</p>
             </motion.div>
             <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Executive Strategy</h4>
-              <p style={{ color: "var(--text-secondary)" }}>High-level coordination and operational leadership for growth.</p>
+              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Digital Marketing</h4>
+              <p style={{ color: "var(--text-secondary)" }}>Designing high-converting campaigns, funnel optimization, and growth strategy.</p>
             </motion.div>
             <motion.div className="glass bento-item" style={{ background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 100%)" }} whileHover={{ scale: 1.02 }}>
-              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Data Architecture</h4>
-              <p style={{ color: "var(--text-secondary)" }}>Building advanced Excel systems and local databases for organized data management.</p>
+              <h4 style={{ fontSize: "1.25rem", color: "white" }}>Technical VA Services</h4>
+              <p style={{ color: "var(--text-secondary)" }}>High-impact administrative support, day-to-day execution, and systems organization.</p>
             </motion.div>
             <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
               <h4 style={{ fontSize: "1.25rem", color: "white" }}>AI Engineering</h4>
@@ -292,7 +292,7 @@ export default function Home() {
                 <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Available for Partnership</span>
                 <h2 className="hero-title" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", marginTop: "16px", marginBottom: "24px" }}>Let's <span className="gradient-text">Connect</span></h2>
                 <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem", lineHeight: "1.6", marginBottom: "40px" }}>
-                  I help high-growth teams and founders bridge the gap between complex systems and executive support. Whether you need an AI-driven workflow, a custom web solution, or strategic technical assistance—let's discuss how we can scale your operations.
+                  I help high-growth teams and founders bridge the gap between complex systems and executive support. Whether you need an AI-driven workflow, a custom web solution, or targeted digital marketing—let's discuss how we can scale your operations.
                 </p>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>

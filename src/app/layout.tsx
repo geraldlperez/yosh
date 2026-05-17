@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Gerald Perez | Strategic Operations",
-  description: "High-end operations and automation specialist helping businesses scale through technology.",
+  title: "Gerald Perez | AI Automation Specialist & Technical VA",
+  description: "Professional AI Automation Specialist, Technical VA, Web Developer, and Digital Marketer helping businesses scale through advanced systems.",
 };
 
 export default function RootLayout({
