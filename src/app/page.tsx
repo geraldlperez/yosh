@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useSpring, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useSpring, useTransform, AnimatePresence, useScroll } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
 
@@ -36,6 +36,13 @@ export default function Home() {
 
   const rotateX = useSpring(useTransform(mouseY, [0, 1000], [10, -10]), springConfig);
   const rotateY = useSpring(useTransform(mouseX, [0, 2000], [-10, 10]), springConfig);
+
+  // Dynamic Scroll Parallax for deep space flow (anime.js / high-end inspiration)
+  const { scrollY } = useScroll();
+  const starsYFar = useTransform(scrollY, [0, 5000], [0, -150]);
+  const starsYMid = useTransform(scrollY, [0, 5000], [0, -300]);
+  const starsYNear = useTransform(scrollY, [0, 5000], [0, -450]);
+  const nebulaYScroll = useTransform(scrollY, [0, 5000], [0, -100]);
 
   const basePath = process.env.NODE_ENV === "production" ? "/yosh" : "";
 
@@ -95,30 +102,59 @@ export default function Home() {
 
           {/* Nebula Mist */}
           <motion.div style={{ x: nebulaX, y: nebulaY, width: "100%", height: "100%" }}>
-            <div className="nebula" style={{ top: "-5%", left: "-5%" }} />
-            <div className="nebula" style={{ bottom: "-5%", right: "-5%" }} />
+            <motion.div style={{ x: nebulaYScroll, y: nebulaYScroll, position: "absolute", inset: 0, willChange: "transform" }}>
+              <div className="nebula" style={{ top: "-5%", left: "-5%" }} />
+              <div className="nebula" style={{ bottom: "-5%", right: "-5%" }} />
+            </motion.div>
           </motion.div>
 
           {/* Razor Omni-Stars */}
-          <motion.div style={{ x: starX, y: starY }} className="stars-container">
-            {mounted && [...Array(120)].map((_, i) => (
-              <div key={i} className="star-dot" style={{ top: `${(i * 23.7) % 100}%`, left: `${(i * 17.3) % 100}%`, width: i % 10 === 0 ? "2px" : "1px", height: i % 10 === 0 ? "2px" : "1px", "--duration": `${2 + (i % 6)}s` } as any} />
-            ))}
+          <motion.div style={{ x: starX, y: starY, willChange: "transform" }} className="stars-container">
+            {/* Layer 1: Far Stars (Moves slowest on scroll diagonally \) */}
+            <motion.div style={{ x: starsYFar, y: starsYFar, position: "absolute", inset: 0, willChange: "transform" }}>
+              {mounted && [...Array(40)].map((_, i) => {
+                const idx = i * 3;
+                return (
+                  <div key={`far-${idx}`} className="star-dot" style={{ top: `${(idx * 23.7) % 100}%`, left: `${(idx * 17.3) % 100}%`, width: "1px", height: "1px", opacity: 0.3, "--duration": `${4 + (idx % 4)}s` } as any} />
+                );
+              })}
+            </motion.div>
 
-            {mounted && [...Array(10)].map((_, i) => {
-              const edge = i % 4;
-              let top = "0%", left = "0%", rotate = 0;
-              if (edge === 0) { top = `${Math.random() * 100}%`; left = "-10%"; rotate = -30 + Math.random() * 60; }
-              else if (edge === 1) { top = "-10%"; left = `${Math.random() * 100}%`; rotate = 60 + Math.random() * 60; }
-              else if (edge === 2) { top = `${Math.random() * 100}%`; left = "110%"; rotate = 150 + Math.random() * 60; }
-              else { top = "110%"; left = `${Math.random() * 100}%`; rotate = 240 + Math.random() * 60; }
+            {/* Layer 2: Mid Stars (Moves at medium speed on scroll diagonally \) */}
+            <motion.div style={{ x: starsYMid, y: starsYMid, position: "absolute", inset: 0, willChange: "transform" }}>
+              {mounted && [...Array(40)].map((_, i) => {
+                const idx = i * 3 + 1;
+                return (
+                  <div key={`mid-${idx}`} className="star-dot" style={{ top: `${(idx * 23.7) % 100}%`, left: `${(idx * 17.3) % 100}%`, width: "1.5px", height: "1.5px", opacity: 0.6, "--duration": `${3 + (idx % 4)}s` } as any} />
+                );
+              })}
+            </motion.div>
 
-              return (
-                <div key={`star-rhythm-${i}`} style={{ position: "absolute", top, left, transform: `rotate(${rotate}deg)`, pointerEvents: "none" }}>
-                  <div className="shooting-star" style={{ "--duration": "60s", "--delay": `${i * 6}s` } as any} />
-                </div>
-              );
-            })}
+            {/* Layer 3: Near Stars & Shooting Stars (Moves fastest on scroll diagonally \) */}
+            <motion.div style={{ x: starsYNear, y: starsYNear, position: "absolute", inset: 0, willChange: "transform" }}>
+              {mounted && [...Array(40)].map((_, i) => {
+                const idx = i * 3 + 2;
+                const isLarge = idx % 10 === 0;
+                return (
+                  <div key={`near-${idx}`} className="star-dot" style={{ top: `${(idx * 23.7) % 100}%`, left: `${(idx * 17.3) % 100}%`, width: isLarge ? "3px" : "2px", height: isLarge ? "3px" : "2px", opacity: 0.9, boxShadow: isLarge ? "0 0 8px #ffffff" : "none", "--duration": `${2 + (idx % 4)}s` } as any} />
+                );
+              })}
+
+              {mounted && [...Array(10)].map((_, i) => {
+                const edge = i % 4;
+                let top = "0%", left = "0%", rotate = 0;
+                if (edge === 0) { top = `${Math.random() * 100}%`; left = "-10%"; rotate = -30 + Math.random() * 60; }
+                else if (edge === 1) { top = "-10%"; left = `${Math.random() * 100}%`; rotate = 60 + Math.random() * 60; }
+                else if (edge === 2) { top = `${Math.random() * 100}%`; left = "110%"; rotate = 150 + Math.random() * 60; }
+                else { top = "110%"; left = `${Math.random() * 100}%`; rotate = 240 + Math.random() * 60; }
+
+                return (
+                  <div key={`star-rhythm-${i}`} style={{ position: "absolute", top, left, transform: `rotate(${rotate}deg)`, pointerEvents: "none" }}>
+                    <div className="shooting-star" style={{ "--duration": "60s", "--delay": `${i * 6}s` } as any} />
+                  </div>
+                );
+              })}
+            </motion.div>
           </motion.div>
 
           <motion.div
