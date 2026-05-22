@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Gerald Perez | AI Automation Specialist & Technical VA",
+  title: "Gerald | Portfolio",
   description: "Professional AI Automation Specialist, Technical VA, Web Developer, and Digital Marketer helping businesses scale through advanced systems.",
 };
 
