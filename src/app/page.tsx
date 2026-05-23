@@ -176,7 +176,7 @@ export default function Home() {
                 <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
                 <p className="subtitle" style={{ marginBottom: "32px" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong>, <strong>AI Automation</strong>, and <strong>Digital Growth</strong>.</p>
                 <div className="hero-buttons" style={{ display: "flex", gap: "16px", marginTop: "32px" }}>
-                  <Link href="/cv.pdf" target="_blank" className="btn-primary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "700", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flex: 1 }}>View Resume</Link>
+                  <Link href="/resume.pdf" target="_blank" className="btn-primary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "700", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flex: 1 }}>View Resume</Link>
                   <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "600", cursor: "pointer", backdropFilter: "blur(10px)", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>Partner with Me</button>
                 </div>
               </motion.div>
