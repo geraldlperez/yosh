@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useSpring, useTransform, AnimatePresence, useScroll } from "framer-motion";
+import { motion, useSpring, useTransform, AnimatePresence, useScroll } from "framer-motion"; // Redeploy
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
 
