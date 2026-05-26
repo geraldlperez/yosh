@@ -18,7 +18,7 @@ class Particle {
     this.speedX = Math.random() * 1.5 - 0.75; // slight horizontal drift
     this.speedY = Math.random() * 2 + 1; // falling down due to "gravity"
     this.life = 1; 
-    this.color = Math.random() > 0.5 ? "255,255,255" : "56,189,248"; // White or Cyan
+    this.color = Math.random() > 0.5 ? "255,255,255" : "192,192,192"; // White or Silver
   }
 
   update() {

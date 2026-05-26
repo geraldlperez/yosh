@@ -184,7 +184,7 @@ export default function Home() {
                 width: "8px", height: "8px",
                 background: "#ffffff",
                 borderRadius: "50%",
-                boxShadow: "0 0 10px #ffffff, 0 0 20px #38bdf8",
+                boxShadow: "0 0 10px #ffffff, 0 0 20px #c0c0c0",
                 pointerEvents: "none",
                 zIndex: 99999,
                 mixBlendMode: "difference"
@@ -214,7 +214,7 @@ export default function Home() {
           <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 0.8fr", gap: isMobile ? "40px" : "60px", alignItems: "center" }}>
               <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1.2, ease: "easeOut" }}>
-                <span style={{ color: "#38bdf8", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>AI Automation Specialist & Technical VA | Web Dev & Digital Marketing</span>
+                <span style={{ color: "#c0c0c0", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>AI Automation Specialist & Technical VA | Web Dev & Digital Marketing</span>
                 <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
                 <p className="subtitle" style={{ marginBottom: "40px", fontSize: "1.2rem" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong>, <strong>AI Automation</strong>, and <strong>Digital Growth</strong>.</p>
                 <div className="hero-buttons" style={{ display: "flex", gap: "20px" }}>
@@ -228,7 +228,7 @@ export default function Home() {
                     <img src={`${basePath}/test-3.png`} alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
                   </div>
                 </div>
-                <div style={{ position: "absolute", top: "50%", left: "50%", width: "140%", height: "140%", background: "radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%)", zIndex: 1 }} />
+                <div style={{ position: "absolute", top: "50%", left: "50%", width: "140%", height: "140%", zIndex: 1 }} />
               </motion.div>
             </div>
           </section>
@@ -308,7 +308,7 @@ export default function Home() {
                 <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>High-impact administrative support, execution, and systems organization.</p>
               </motion.div>
               <motion.div className="glass bento-item" style={{ gridColumn: "span 3" }} whileHover={{ scale: 1.01, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                <h4 style={{ fontSize: "1.5rem", color: "#38bdf8", fontWeight: "800" }}>Technical Partnership</h4>
+                <h4 style={{ fontSize: "1.5rem", color: "#c0c0c0", fontWeight: "800" }}>Technical Partnership</h4>
                 <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>End-to-end technical expertise supporting founders in building, scaling, and optimizing day-to-day operations.</p>
               </motion.div>
             </div>
