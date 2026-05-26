@@ -30,7 +30,8 @@ export function ProjectCard({
   return (
     <motion.div 
       className="glass" 
-      whileHover={{ y: -10 }} 
+      whileHover={{ y: -12, scale: 1.01 }} 
+      transition={{ duration: 0.4, ease: "easeOut" }}
       style={{ overflow: "hidden", display: "flex", flexDirection: "column", borderRadius: "32px", border: "1px solid rgba(255,255,255,0.15)" }}
     >
       {/* LARGER Slider Header */}

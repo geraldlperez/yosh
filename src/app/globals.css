@@ -3,15 +3,16 @@ html {
 }
 
 :root {
-  --bg-color: #020205;
-  --text-color: #ffffff;
-  --text-secondary: #a1a1aa;
-  --accent-color: #ffffff;
-  --accent-hover: #f4f4f5;
-  --card-bg: rgba(255, 255, 255, 0.03);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --glass-bg: rgba(255, 255, 255, 0.02);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --bg-color: #05050A;
+  --text-color: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent-color: #38bdf8;
+  --accent-hover: #7dd3fc;
+  --card-bg: rgba(15, 23, 42, 0.4);
+  --card-border: rgba(56, 189, 248, 0.15);
+  --glass-bg: rgba(15, 23, 42, 0.3);
+  --glass-border: rgba(125, 211, 252, 0.1);
+  --glow-primary: 0 0 20px rgba(56, 189, 248, 0.3);
 }
 
 * {
@@ -32,6 +33,21 @@ body {
 
 body {
   background: transparent;
+  cursor: none;
+}
+
+/* Fallback for elements that override cursor */
+a, button, input, textarea, .sidebar-item {
+  cursor: none !important;
+}
+
+@media (max-width: 768px) {
+  body, a, button, input, textarea, .sidebar-item {
+    cursor: auto !important;
+  }
+  a, button, .sidebar-item {
+    cursor: pointer !important;
+  }
 }
 
 /* --- Galaxy Elements --- */
@@ -129,14 +145,21 @@ a {
 
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  transition: all 0.3s ease;
+  border-radius: 24px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.glass:hover {
+  border-color: rgba(125, 211, 252, 0.3);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.5), var(--glow-primary);
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+  background: linear-gradient(135deg, #fff 0%, #38bdf8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -145,32 +168,41 @@ a {
 .btn-primary {
   text-decoration: none !important;
   display: inline-block;
-  padding: 12px 28px;
-  background: #fff;
-  color: #000;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #f8fafc, #cbd5e1);
+  color: #0f172a;
+  border-radius: 16px;
+  font-weight: 700;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-primary:hover {
-  background: #f4f4f5;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(56, 189, 248, 0.4), 0 0 20px rgba(255, 255, 255, 0.4);
   text-decoration: none !important;
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+  background: rgba(15, 23, 42, 0.4);
+  color: #f8fafc;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none !important;
+  font-weight: 600;
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.8);
+  border-color: #38bdf8;
+  transform: translateY(-4px);
+  box-shadow: var(--glow-primary);
 }
 
 .section-container {
@@ -282,7 +314,23 @@ a {
   flex-direction: column;
   justify-content: flex-end;
   gap: 16px;
-  min-height: 240px;
+  min-height: 260px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.bento-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.1), transparent 60%);
+  pointer-events: none;
 }
 
 .light-sweep {

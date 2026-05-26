@@ -10,6 +10,7 @@ import { creativeProjects } from "@/data/creative";
 import { techStack } from "@/data/techStack";
 import { useMousePosition } from "@/hooks/useMousePosition";
 import { ProjectCard } from "@/components/ProjectCard";
+import { StarTrail } from "@/components/StarTrail";
 
 import emailjs from "@emailjs/browser";
 
@@ -43,6 +44,12 @@ export default function Home() {
   const starsYMid = useTransform(scrollY, [0, 5000], [0, -300]);
   const starsYNear = useTransform(scrollY, [0, 5000], [0, -450]);
   const nebulaYScroll = useTransform(scrollY, [0, 5000], [0, -100]);
+
+  // Custom Cursor Transforms
+  const cursorX = useTransform(mouseX, val => val - 4);
+  const cursorY = useTransform(mouseY, val => val - 4);
+  const ringX = useSpring(useTransform(mouseX, val => val - 20), { damping: 25, stiffness: 150 });
+  const ringY = useSpring(useTransform(mouseY, val => val - 20), { damping: 25, stiffness: 150 });
 
   const basePath = process.env.NODE_ENV === "production" ? "/yosh" : "";
 
@@ -98,7 +105,7 @@ export default function Home() {
       <div style={{ opacity: loading ? 0 : 1, transition: "opacity 1.5s ease" }}>
 
         {/* --- Cosmic Background Layer --- */}
-        <div className="galaxy-bg" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, background: "#020205", overflow: "hidden" }}>
+        <div className="galaxy-bg" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, background: "#05050A", overflow: "hidden" }}>
 
           {/* Nebula Mist */}
           <motion.div style={{ x: nebulaX, y: nebulaY, width: "100%", height: "100%" }}>
@@ -165,19 +172,54 @@ export default function Home() {
           />
         </div>
 
+        {/* --- Custom Cosmic Cursor --- */}
+        {!isMobile && mounted && (
+          <>
+            <StarTrail />
+            <motion.div
+              style={{
+                position: "fixed",
+                top: 0, left: 0,
+                x: cursorX, y: cursorY,
+                width: "8px", height: "8px",
+                background: "#ffffff",
+                borderRadius: "50%",
+                boxShadow: "0 0 10px #ffffff, 0 0 20px #38bdf8",
+                pointerEvents: "none",
+                zIndex: 99999,
+                mixBlendMode: "difference"
+              }}
+            />
+            <motion.div
+              style={{
+                position: "fixed",
+                top: 0, left: 0,
+                x: ringX, y: ringY,
+                width: "40px", height: "40px",
+                border: "2px solid #ffffff",
+                borderRadius: "50%",
+                boxShadow: "inset 0 0 15px rgba(255, 255, 255, 0.5)",
+                pointerEvents: "none",
+                zIndex: 99998,
+                mixBlendMode: "difference"
+              }}
+            />
+          </>
+        )}
+
         <div style={{ position: "relative", zIndex: 10 }}>
           <div className="noise" />
 
           {/* Hero Section (AESTHETIC RESTORED) */}
           <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 0.8fr", gap: isMobile ? "40px" : "60px", alignItems: "center" }}>
-              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}>
-                <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>AI Automation Specialist & Technical VA | Web Dev & Digital Marketing</span>
+              <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1.2, ease: "easeOut" }}>
+                <span style={{ color: "#38bdf8", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>AI Automation Specialist & Technical VA</span>
                 <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
-                <p className="subtitle" style={{ marginBottom: "32px" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong>, <strong>AI Automation</strong>, and <strong>Digital Growth</strong>.</p>
-                <div className="hero-buttons" style={{ display: "flex", gap: "16px", marginTop: "32px" }}>
-                  <Link href="/resume.pdf" target="_blank" className="btn-primary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "700", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flex: 1 }}>View Resume</Link>
-                  <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ padding: "16px 32px", borderRadius: "12px", fontWeight: "600", cursor: "pointer", backdropFilter: "blur(10px)", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>Partner with Me</button>
+                <p className="subtitle" style={{ marginBottom: "40px", fontSize: "1.2rem" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong>, <strong>AI Automation</strong>, and <strong>Digital Growth</strong>.</p>
+                <div className="hero-buttons" style={{ display: "flex", gap: "20px" }}>
+                  <Link href="/cv.pdf" target="_blank" className="btn-primary" style={{ flex: 1, textAlign: "center" }}>View Resume</Link>
+                  <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ flex: 1 }}>Partner with Me</button>
                 </div>
               </motion.div>
               <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
@@ -247,31 +289,27 @@ export default function Home() {
 
           {/* Strategic Capabilities */}
           <section id="capabilities" className="section-container">
-            <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Strategic Capabilities</h2>
+            <h2 style={{ fontSize: "2.5rem", marginBottom: "60px", textAlign: "center" }}>Strategic Capabilities</h2>
             <div className="bento-grid">
-              <motion.div className="glass bento-item" style={{ gridColumn: "span 2", background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 100%)" }} whileHover={{ scale: 1.02 }}>
-                <h4 style={{ fontSize: "1.25rem", color: "white" }}>Web Development</h4>
-                <p style={{ color: "var(--text-secondary)" }}>Engineering systems using React, TypeScript, and modern API architectures.</p>
+              <motion.div className="glass bento-item" style={{ gridColumn: "span 2" }} whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Web Development</h4>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>Engineering systems using React, TypeScript, and modern API architectures.</p>
               </motion.div>
-              <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
-                <h4 style={{ fontSize: "1.25rem", color: "white" }}>Automation</h4>
-                <p style={{ color: "var(--text-secondary)" }}>Architecting complex workflows to scale virtual operations.</p>
+              <motion.div className="glass bento-item" whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }}>
+                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Automation</h4>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>Architecting complex workflows to scale operations.</p>
               </motion.div>
-              <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
-                <h4 style={{ fontSize: "1.25rem", color: "white" }}>Digital Marketing</h4>
-                <p style={{ color: "var(--text-secondary)" }}>Designing high-converting campaigns, funnel optimization, and growth strategy.</p>
+              <motion.div className="glass bento-item" whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Digital Marketing</h4>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>Designing high-converting campaigns and growth strategy.</p>
               </motion.div>
-              <motion.div className="glass bento-item" style={{ background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 100%)" }} whileHover={{ scale: 1.02 }}>
-                <h4 style={{ fontSize: "1.25rem", color: "white" }}>Technical VA Services</h4>
-                <p style={{ color: "var(--text-secondary)" }}>High-impact administrative support, day-to-day execution, and systems organization.</p>
+              <motion.div className="glass bento-item" style={{ gridColumn: "span 2" }} whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }}>
+                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Technical VA Services</h4>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>High-impact administrative support, execution, and systems organization.</p>
               </motion.div>
-              <motion.div className="glass bento-item" whileHover={{ scale: 1.02 }}>
-                <h4 style={{ fontSize: "1.25rem", color: "white" }}>AI Engineering</h4>
-                <p style={{ color: "var(--text-secondary)" }}>Developing custom AI solutions and prompt engineering for automation.</p>
-              </motion.div>
-              <motion.div className="glass bento-item" style={{ gridColumn: "span 3" }} whileHover={{ scale: 1.02 }}>
-                <h4 style={{ fontSize: "1.25rem", color: "white" }}>Technical Partnership</h4>
-                <p style={{ color: "var(--text-secondary)" }}>End-to-end technical expertise supporting founders in building, scaling, and optimizing day-to-day operations.</p>
+              <motion.div className="glass bento-item" style={{ gridColumn: "span 3" }} whileHover={{ scale: 1.01, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <h4 style={{ fontSize: "1.5rem", color: "#38bdf8", fontWeight: "800" }}>Technical Partnership</h4>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>End-to-end technical expertise supporting founders in building, scaling, and optimizing day-to-day operations.</p>
               </motion.div>
             </div>
           </section>
