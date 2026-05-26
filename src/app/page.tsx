@@ -214,7 +214,7 @@ export default function Home() {
           <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 0.8fr", gap: isMobile ? "40px" : "60px", alignItems: "center" }}>
               <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1.2, ease: "easeOut" }}>
-                <span style={{ color: "#38bdf8", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>AI Automation Specialist & Technical VA</span>
+                <span style={{ color: "#38bdf8", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>AI Automation Specialist & Technical VA | Web Dev & Digital Marketing</span>
                 <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
                 <p className="subtitle" style={{ marginBottom: "40px", fontSize: "1.2rem" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong>, <strong>AI Automation</strong>, and <strong>Digital Growth</strong>.</p>
                 <div className="hero-buttons" style={{ display: "flex", gap: "20px" }}>
@@ -289,7 +289,7 @@ export default function Home() {
 
           {/* Strategic Capabilities */}
           <section id="capabilities" className="section-container">
-            <h2 style={{ fontSize: "2.5rem", marginBottom: "60px", textAlign: "center" }}>Strategic Capabilities</h2>
+            <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Strategic Capabilities</h2>
             <div className="bento-grid">
               <motion.div className="glass bento-item" style={{ gridColumn: "span 2" }} whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
                 <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Web Development</h4>
