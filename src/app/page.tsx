@@ -214,12 +214,12 @@ export default function Home() {
           <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 0.8fr", gap: isMobile ? "40px" : "60px", alignItems: "center" }}>
               <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1.2, ease: "easeOut" }}>
-                <span style={{ color: "#c0c0c0", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>Technical Operations Specialist | Automation & Full-Stack Development | Creative Design</span>
+                <span style={{ color: "#c0c0c0", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>Full-Stack Developer & Automation Specialist</span>
                 <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
-                <p className="subtitle" style={{ marginBottom: "40px", fontSize: "1.2rem" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong>, <strong>AI Automation</strong>, and <strong>Digital Growth</strong>.</p>
+                <p className="subtitle" style={{ marginBottom: "40px", fontSize: "1.2rem" }}>Architecting scalable web applications and automated systems for high-growth teams.</p>
                 <div className="hero-buttons" style={{ display: "flex", gap: "20px" }}>
                   <Link href="/resume.pdf" target="_blank" className="btn-primary" style={{ flex: 1, textAlign: "center" }}>View Resume</Link>
-                  <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ flex: 1 }}>Partner with Me</button>
+                  <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ flex: 1 }}>Get in Touch</button>
                 </div>
               </motion.div>
               <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
@@ -292,24 +292,24 @@ export default function Home() {
             <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Strategic Capabilities</h2>
             <div className="bento-grid">
               <motion.div className="glass bento-item" style={{ gridColumn: "span 2" }} whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Web Development</h4>
-                <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>Engineering systems using React, TypeScript, and modern API architectures.</p>
+                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Full-Stack Development</h4>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>Engineering scalable systems using React, TypeScript, and modern API architectures.</p>
               </motion.div>
               <motion.div className="glass bento-item" whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }}>
                 <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Automation</h4>
                 <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>Architecting complex workflows to scale operations.</p>
               </motion.div>
               <motion.div className="glass bento-item" whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Digital Marketing</h4>
-                <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>Designing high-converting campaigns and growth strategy.</p>
+                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Creative Design</h4>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>Graphic design, brand identities, posters, and high-converting social media collateral.</p>
               </motion.div>
               <motion.div className="glass bento-item" style={{ gridColumn: "span 2" }} whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }}>
-                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Technical VA Services</h4>
-                <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>High-impact administrative support, execution, and systems organization.</p>
+                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Technical Operations</h4>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>High-impact systems organization, execution, and technical support.</p>
               </motion.div>
               <motion.div className="glass bento-item" style={{ gridColumn: "span 3" }} whileHover={{ scale: 1.01, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                <h4 style={{ fontSize: "1.5rem", color: "#c0c0c0", fontWeight: "800" }}>Technical Partnership</h4>
-                <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>End-to-end technical expertise supporting founders in building, scaling, and optimizing day-to-day operations.</p>
+                <h4 style={{ fontSize: "1.5rem", color: "#c0c0c0", fontWeight: "800" }}>Cross-Functional Expertise</h4>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>Delivering comprehensive technical solutions—from scalable software architecture and automated workflows to daily operational optimization.</p>
               </motion.div>
             </div>
           </section>
@@ -420,27 +420,37 @@ export default function Home() {
                 >
                   <div className="form-row">
                     <div className="input-group">
-                      <label className="input-label">First Name</label>
-                      <input name="first_name" type="text" placeholder="Yoshi" required className="input-field" />
+                      {/* <label className="input-label">First Name</label> */}
+                      <input name="first_name" type="text" placeholder="First Name" required className="input-field" />
                     </div>
                     <div className="input-group">
-                      <label className="input-label">Last Name</label>
-                      <input name="last_name" type="text" placeholder="Tsukino" required className="input-field" />
+                      {/* <label className="input-label">Last Name</label> */}
+                      <input name="last_name" type="text" placeholder="Last Name" required className="input-field" />
                     </div>
                   </div>
 
                   <div className="input-group">
-                    <label className="input-label">Email Address</label>
-                    <input name="email" type="email" placeholder="yoshitsukino@example.com" required className="input-field" />
+                    {/* <label className="input-label">Email Address</label> */}
+                    <input name="email" type="email" placeholder="Email Address" required className="input-field" />
                   </div>
 
                   <div className="input-group">
-                    <label className="input-label">How can I help you?</label>
-                    <textarea name="message" placeholder="Describe your project or needs..." required className="textarea-field" />
+                    {/* <label className="input-label">How can I help you?</label> */}
+                    <textarea name="message" placeholder="How can I help you?" required className="textarea-field" />
                   </div>
 
-                  <button type="submit" disabled={isSubmitting} className="submit-btn">
-                    {isSubmitting ? "Sending Message..." : "Send Message"}
+                  <button type="submit" disabled={isSubmitting} className="submit-btn" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+                    {isSubmitting ? (
+                      "Sending Message..."
+                    ) : (
+                      <>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="22" y1="2" x2="11" y2="13"></line>
+                          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                        Send Message
+                      </>
+                    )}
                   </button>
                 </form>
               </div>
@@ -529,8 +539,8 @@ export default function Home() {
           <footer className="section-container" style={{ borderTop: "1px solid var(--glass-border)", padding: "40px 24px", color: "var(--text-secondary)", fontSize: "0.875rem", display: "flex", justifyContent: "space-between" }}>
             <p>© 2026 Gerald Perez</p>
             <div style={{ display: "flex", gap: "24px" }}>
-              <Link href="https://linkedin.com" target="_blank" className="hover-text">LinkedIn</Link>
-              <Link href="https://github.com" target="_blank" className="hover-text">GitHub</Link>
+              <Link href="https://www.linkedin.com/in/geraldperez/" target="_blank" className="hover-text">LinkedIn</Link>
+              <Link href="https://github.com/geraldlperez" target="_blank" className="hover-text">GitHub</Link>
             </div>
           </footer>
         </div>
