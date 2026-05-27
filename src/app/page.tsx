@@ -214,7 +214,7 @@ export default function Home() {
           <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 0.8fr", gap: isMobile ? "40px" : "60px", alignItems: "center" }}>
               <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1.2, ease: "easeOut" }}>
-                <span style={{ color: "#c0c0c0", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>AI Automation Specialist & Technical VA | Web Dev & Digital Marketing</span>
+                <span style={{ color: "#c0c0c0", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>Technical Operations Specialist | Automation & Full-Stack Development | Creative Design</span>
                 <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
                 <p className="subtitle" style={{ marginBottom: "40px", fontSize: "1.2rem" }}>The <strong>Technical Partner</strong> for High-Growth Teams. Bridging the gap between <strong>Systems Building</strong>, <strong>AI Automation</strong>, and <strong>Digital Growth</strong>.</p>
                 <div className="hero-buttons" style={{ display: "flex", gap: "20px" }}>
