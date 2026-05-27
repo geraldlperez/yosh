@@ -2,8 +2,8 @@ export const projects = [
   {
     id: "project-1",
     title: "Fukushimart Convenience Store",
-    role: "Full-Stack Web Developer",
-    description: "Architected a comprehensive web-based retail management system integrating real-time inventory tracking and advanced analytics. Built visualization modules that uncover sales trends and automate stock synchronization, enabling data-driven retail operations through a sleek, interactive interface.",
+    role: "Technical VA & Systems Builder",
+    description: "Streamlined retail operations by building a comprehensive web-based inventory management system. Automated stock synchronization and generated data-driven reports, significantly reducing manual administrative tasks and providing actionable insights through a sleek, interactive interface.",
     image: "/project-first/P0.png",
     gallery: [
       "/project-first/P1-0.png",
@@ -23,8 +23,8 @@ export const projects = [
   {
     id: "project-2",
     title: "Human Resource & Development Portal",
-    role: "Full-Stack Engineer",
-    description: "Digitized administrative workflows for the School Governance division by architecting a secure, centralized full-stack portal. Replaced manual HR processes with a real-time personnel management dashboard, optimizing database performance and streamlining institutional reporting efficiency.",
+    role: "Technical Operations Specialist",
+    description: "Digitized administrative workflows for the School Governance division by setting up a secure, centralized portal. Replaced manual HR processes with a real-time personnel management dashboard, saving hours of weekly data-entry and streamlining institutional reporting.",
     image: "/project-second/P2-0.png",
     gallery: [
       "/project-second/P2-0.png",

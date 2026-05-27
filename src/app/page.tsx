@@ -214,9 +214,9 @@ export default function Home() {
           <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 0.8fr", gap: isMobile ? "40px" : "60px", alignItems: "center" }}>
               <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1.2, ease: "easeOut" }}>
-                <span style={{ color: "#c0c0c0", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>Full-Stack Developer & Automation Specialist</span>
+                <span style={{ color: "#c0c0c0", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>Technical VA | Automation, Full-Stack Dev & Design</span>
                 <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
-                <p className="subtitle" style={{ marginBottom: "40px", fontSize: "1.2rem" }}>Architecting scalable web applications and automated systems for high-growth teams.</p>
+                <p className="subtitle" style={{ marginBottom: "40px", fontSize: "1.2rem" }}>Providing high-level technical support, managing complex workflows, and streamlining daily operations for busy founders.</p>
                 <div className="hero-buttons" style={{ display: "flex", gap: "20px" }}>
                   <Link href="/resume.pdf" target="_blank" className="btn-primary" style={{ flex: 1, textAlign: "center" }}>View Resume</Link>
                   <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ flex: 1 }}>Get in Touch</button>
@@ -308,8 +308,8 @@ export default function Home() {
                 <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>High-impact systems organization, execution, and technical support.</p>
               </motion.div>
               <motion.div className="glass bento-item" style={{ gridColumn: "span 3" }} whileHover={{ scale: 1.01, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                <h4 style={{ fontSize: "1.5rem", color: "#c0c0c0", fontWeight: "800" }}>Cross-Functional Expertise</h4>
-                <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>Delivering comprehensive technical solutions—from scalable software architecture and automated workflows to daily operational optimization.</p>
+                <h4 style={{ fontSize: "1.5rem", color: "#c0c0c0", fontWeight: "800" }}>Executive Technical Support</h4>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>End-to-end technical assistance and systems organization to help you scale without operational bottlenecks.</p>
               </motion.div>
             </div>
           </section>
