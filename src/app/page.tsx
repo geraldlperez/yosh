@@ -225,7 +225,7 @@ export default function Home() {
               <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
                 <div className="float">
                   <div className="glass light-sweep" style={{ padding: "12px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.15)" }}>
-                    <img src={`${basePath}/test-5.png`} alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
+                    <img src={`${basePath}/grad-1.png`} alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
                   </div>
                 </div>
                 <div style={{ position: "absolute", top: "50%", left: "50%", width: "140%", height: "140%", zIndex: 1 }} />
