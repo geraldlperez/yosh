@@ -10,7 +10,7 @@ import { creativeProjects } from "@/data/creative";
 import { techStack } from "@/data/techStack";
 import { useMousePosition } from "@/hooks/useMousePosition";
 import { ProjectCard } from "@/components/ProjectCard";
-import { StarTrail } from "@/components/StarTrail";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 import emailjs from "@emailjs/browser";
 
@@ -44,6 +44,13 @@ export default function Home() {
   const starsYMid = useTransform(scrollY, [0, 5000], [0, -300]);
   const starsYNear = useTransform(scrollY, [0, 5000], [0, -450]);
   const nebulaYScroll = useTransform(scrollY, [0, 5000], [0, -100]);
+
+  // Hero Parallax Scroll
+  const heroScrollConfig = { damping: 40, stiffness: 90 };
+  const heroLeftXRaw = useTransform(scrollY, [0, 800], [0, -300]);
+  const heroRightXRaw = useTransform(scrollY, [0, 800], [0, 300]);
+  const heroLeftX = useSpring(heroLeftXRaw, heroScrollConfig);
+  const heroRightX = useSpring(heroRightXRaw, heroScrollConfig);
 
   // Custom Cursor Transforms
   const cursorX = useTransform(mouseX, val => val - 4);
@@ -105,7 +112,7 @@ export default function Home() {
       <div style={{ opacity: loading ? 0 : 1, transition: "opacity 1.5s ease" }}>
 
         {/* --- Cosmic Background Layer --- */}
-        <div className="galaxy-bg" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, background: "#05050A", overflow: "hidden" }}>
+        <div className="galaxy-bg" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, background: "var(--bg-color)", overflow: "hidden" }}>
 
           {/* Nebula Mist */}
           <motion.div style={{ x: nebulaX, y: nebulaY, width: "100%", height: "100%" }}>
@@ -143,7 +150,7 @@ export default function Home() {
                 const idx = i * 3 + 2;
                 const isLarge = idx % 10 === 0;
                 return (
-                  <div key={`near-${idx}`} className="star-dot" style={{ top: `${(idx * 23.7) % 100}%`, left: `${(idx * 17.3) % 100}%`, width: isLarge ? "3px" : "2px", height: isLarge ? "3px" : "2px", opacity: 0.9, boxShadow: isLarge ? "0 0 8px #ffffff" : "none", "--duration": `${2 + (idx % 4)}s` } as any} />
+                  <div key={`near-${idx}`} className="star-dot" style={{ top: `${(idx * 23.7) % 100}%`, left: `${(idx * 17.3) % 100}%`, width: isLarge ? "3px" : "2px", height: isLarge ? "3px" : "2px", opacity: 0.9, boxShadow: isLarge ? "0 0 8px var(--text-color)" : "none", "--duration": `${2 + (idx % 4)}s` } as any} />
                 );
               })}
 
@@ -164,6 +171,27 @@ export default function Home() {
             </motion.div>
           </motion.div>
 
+          {/* Light Mode Birds Layer */}
+          <div className="birds-container">
+            {mounted && [...Array(8)].map((_, i) => (
+              <motion.div
+                key={`bird-${i}`}
+                style={{ position: "absolute", top: `${20 + (i * 10)}%`, left: "-10%" }}
+                animate={{ left: ["-10%", "110%"], top: [`${20 + (i * 10)}%`, `${10 + (i * 5)}%`] }}
+                transition={{ duration: 25 + Math.random() * 15, delay: i * 4.2, repeat: Infinity, ease: "linear" }}
+              >
+                <motion.svg
+                  width="32" height="32" viewBox="0 0 24 24" fill="var(--text-color)" opacity={0.6 + Math.random() * 0.4}
+                  style={{ transform: `scale(${0.5 + Math.random() * 0.5})` }}
+                  animate={{ scaleY: [1, 0.1, 1] }}
+                  transition={{ duration: 0.6 + Math.random() * 0.4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <path d="M12 15.5c-2-2.5-5-5-9-5.5 4.5 0 7.5 2 9 5.5zm0 0c2-2.5 5-5 9-5.5-4.5 0-7.5 2-9 5.5z" />
+                </motion.svg>
+              </motion.div>
+            ))}
+          </div>
+
           <motion.div
             className="planet"
             style={{ top: "15%", right: "8%", x: useSpring(useTransform(mouseX, [0, 2000], [15, -15]), springConfig), y: useSpring(useTransform(mouseY, [0, 1000], [15, -15]), springConfig) }}
@@ -172,63 +200,32 @@ export default function Home() {
           />
         </div>
 
-        {/* --- Custom Cosmic Cursor --- */}
-        {!isMobile && mounted && (
-          <>
-            <StarTrail />
-            <motion.div
-              style={{
-                position: "fixed",
-                top: 0, left: 0,
-                x: cursorX, y: cursorY,
-                width: "8px", height: "8px",
-                background: "#ffffff",
-                borderRadius: "50%",
-                boxShadow: "0 0 10px #ffffff, 0 0 20px #c0c0c0",
-                pointerEvents: "none",
-                zIndex: 99999,
-                mixBlendMode: "difference"
-              }}
-            />
-            <motion.div
-              style={{
-                position: "fixed",
-                top: 0, left: 0,
-                x: ringX, y: ringY,
-                width: "40px", height: "40px",
-                border: "2px solid #ffffff",
-                borderRadius: "50%",
-                boxShadow: "inset 0 0 15px rgba(255, 255, 255, 0.5)",
-                pointerEvents: "none",
-                zIndex: 99998,
-                mixBlendMode: "difference"
-              }}
-            />
-          </>
-        )}
-
         <div style={{ position: "relative", zIndex: 10 }}>
           <div className="noise" />
 
           {/* Hero Section (AESTHETIC RESTORED) */}
           <section className="section-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 0.8fr", gap: isMobile ? "40px" : "60px", alignItems: "center" }}>
-              <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1.2, ease: "easeOut" }}>
-                <span style={{ color: "#c0c0c0", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>Technical VA | Automation, Full-Stack Dev & Design</span>
-                <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
-                <p className="subtitle" style={{ marginBottom: "40px", fontSize: "1.2rem" }}>Providing high-level technical support, managing complex workflows, and streamlining daily operations for busy founders.</p>
-                <div className="hero-buttons" style={{ display: "flex", gap: "20px" }}>
-                  <Link href="/resume.pdf" target="_blank" className="btn-primary" style={{ flex: 1, textAlign: "center" }}>View Resume</Link>
-                  <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ flex: 1 }}>Get in Touch</button>
-                </div>
-              </motion.div>
-              <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
-                <div className="float">
-                  <div className="glass light-sweep" style={{ padding: "12px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.15)" }}>
-                    <img src={`${basePath}/black.png`} alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
+              <motion.div style={{ x: isMobile ? 0 : heroLeftX, willChange: "transform" }}>
+                <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1.2, ease: "easeOut" }}>
+                  <span style={{ color: "var(--accent-color)", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: "0.75rem" }}>Technical VA | Automation, Full-Stack Dev & Design</span>
+                  <h1 className="hero-title mt-4" style={{ marginBottom: "20px" }}>Gerald <span className="gradient-text">Perez</span></h1>
+                  <p className="subtitle" style={{ marginBottom: "40px", fontSize: "1.2rem" }}>Providing high-level technical support, managing complex workflows, and streamlining daily operations for busy founders.</p>
+                  <div className="hero-buttons" style={{ display: "flex", gap: "20px" }}>
+                    <Link href="/resume.pdf" target="_blank" className="btn-primary" style={{ flex: 1, textAlign: "center" }}>View Resume</Link>
+                    <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="btn-secondary" style={{ flex: 1 }}>Get in Touch</button>
                   </div>
-                </div>
-                <div style={{ position: "absolute", top: "50%", left: "50%", width: "140%", height: "140%", zIndex: 1 }} />
+                </motion.div>
+              </motion.div>
+              <motion.div style={{ x: isMobile ? 0 : heroRightX, willChange: "transform" }}>
+                <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.2 }} style={{ position: "relative" }}>
+                  <div className="float">
+                    <div className="glass light-sweep" style={{ padding: "12px", borderRadius: "24px", border: "1px solid var(--glass-border)" }}>
+                      <img src={`${basePath}/white.png`} alt="Gerald Perez" style={{ width: "100%", borderRadius: "16px", filter: "brightness(95%) contrast(105%) grayscale(20%)" }} />
+                    </div>
+                  </div>
+                  <div style={{ position: "absolute", top: "50%", left: "50%", width: "140%", height: "140%", zIndex: 1 }} />
+                </motion.div>
               </motion.div>
             </div>
           </section>
@@ -245,7 +242,7 @@ export default function Home() {
                     <svg style={{ position: "absolute", width: "100%", height: "100%", zIndex: 1 }}>
                       {techStack.map(tech => tech.connections.map(targetId => {
                         const target = techStack.find(t => t.id === targetId);
-                        return target ? <motion.line key={`${tech.id}-${targetId}`} x1={`${tech.x}%`} y1={`${tech.y}%`} x2={`${target.x}%`} y2={`${target.y}%`} stroke="rgba(255,255,255,0.25)" strokeWidth="1.2" animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 4, repeat: Infinity }} /> : null;
+                        return target ? <motion.line key={`${tech.id}-${targetId}`} x1={`${tech.x}%`} y1={`${tech.y}%`} x2={`${target.x}%`} y2={`${target.y}%`} stroke="var(--glass-border)" strokeWidth="1.2" animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 4, repeat: Infinity }} /> : null;
                       }))}
                     </svg>
                     {techStack.map((tech, i) => (
@@ -272,12 +269,12 @@ export default function Home() {
                         style={{
                           width: "100px", height: "100px", flexShrink: 0,
                           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                          background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.1)",
+                          background: "var(--glass-bg)", border: "1px solid var(--glass-border)",
                           borderRadius: "20px"
                         }}
                       >
-                        <img src={`https://api.iconify.design/simple-icons:${tech.icon}.svg?color=white`} style={{ width: "32px", height: "32px", marginBottom: "8px" }} alt={tech.name} />
-                        <span style={{ fontSize: "0.6rem", color: "white", opacity: 0.8, fontWeight: "600" }}>{tech.name}</span>
+                        <div style={{ width: "32px", height: "32px", marginBottom: "8px", backgroundColor: "var(--text-color)", WebkitMaskImage: `url(https://api.iconify.design/simple-icons:${tech.icon}.svg)`, WebkitMaskSize: "contain", WebkitMaskRepeat: "no-repeat", WebkitMaskPosition: "center" }} />
+                        <span style={{ fontSize: "0.6rem", color: "var(--text-color)", opacity: 0.8, fontWeight: "600" }}>{tech.name}</span>
                       </div>
                     ))}
                   </motion.div>
@@ -292,23 +289,23 @@ export default function Home() {
             <h2 style={{ fontSize: "2.5rem", marginBottom: "60px" }}>Strategic Capabilities</h2>
             <div className="bento-grid">
               <motion.div className="glass bento-item" style={{ gridColumn: "span 2" }} whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Full-Stack Development</h4>
+                <h4 style={{ fontSize: "1.35rem", color: "var(--text-color)", fontWeight: "700" }}>Full-Stack Development</h4>
                 <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>Engineering scalable systems using React, TypeScript, and modern API architectures.</p>
               </motion.div>
               <motion.div className="glass bento-item" whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }}>
-                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Automation</h4>
+                <h4 style={{ fontSize: "1.35rem", color: "var(--text-color)", fontWeight: "700" }}>Automation</h4>
                 <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>Architecting complex workflows to scale operations.</p>
               </motion.div>
               <motion.div className="glass bento-item" whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Creative Design</h4>
+                <h4 style={{ fontSize: "1.35rem", color: "var(--text-color)", fontWeight: "700" }}>Creative Design</h4>
                 <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>Graphic design, brand identities, posters, and high-converting social media collateral.</p>
               </motion.div>
               <motion.div className="glass bento-item" style={{ gridColumn: "span 2" }} whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }}>
-                <h4 style={{ fontSize: "1.35rem", color: "white", fontWeight: "700" }}>Technical Operations</h4>
+                <h4 style={{ fontSize: "1.35rem", color: "var(--text-color)", fontWeight: "700" }}>Technical Operations</h4>
                 <p style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>High-impact systems organization, execution, and technical support.</p>
               </motion.div>
               <motion.div className="glass bento-item" style={{ gridColumn: "span 3" }} whileHover={{ scale: 1.01, y: -5 }} transition={{ duration: 0.3 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                <h4 style={{ fontSize: "1.5rem", color: "#c0c0c0", fontWeight: "800" }}>Executive Technical Support</h4>
+                <h4 style={{ fontSize: "1.5rem", color: "var(--accent-color)", fontWeight: "800" }}>Executive Technical Support</h4>
                 <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>End-to-end technical assistance and systems organization to help you scale without operational bottlenecks.</p>
               </motion.div>
             </div>
@@ -355,7 +352,7 @@ export default function Home() {
           <section id="contact" className="section-container" style={{ paddingBottom: "160px" }}>
             <motion.div
               className="glass"
-              style={{ padding: isMobile ? "30px" : "60px", borderRadius: "40px", border: "1px solid rgba(255, 255, 255, 0.3)", background: "rgba(255, 255, 255, 0.02)" }}
+              style={{ padding: isMobile ? "30px" : "60px", borderRadius: "40px", border: "1px solid var(--glass-border)", background: "var(--glass-bg)" }}
               whileInView={{ opacity: 1, scale: 1 }}
               initial={{ opacity: 0, scale: 0.95 }}
               viewport={{ once: true }}
@@ -363,19 +360,19 @@ export default function Home() {
               <div className="contact-grid">
                 {/* Left Pane: Professional Context */}
                 <div>
-                  <span style={{ color: "white", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Available for Partnership</span>
+                  <span style={{ color: "var(--text-color)", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", fontSize: "0.75rem", opacity: 0.8 }}>Available for Partnership</span>
                   <h2 className="hero-title" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", marginTop: "16px", marginBottom: "24px" }}>Let's <span className="gradient-text">Connect</span></h2>
                   <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem", lineHeight: "1.6", marginBottom: "40px" }}>
                     I help high-growth teams and founders bridge the gap between complex systems and executive support. Whether you need an AI-driven workflow, a custom web solution, or targeted digital marketing—let's discuss how we can scale your operations.
                   </p>
 
                   <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "white", opacity: 0.8 }}>
-                      <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>✉️</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "var(--text-color)", opacity: 0.8 }}>
+                      <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--glass-bg)", border: "1px solid var(--glass-border)", display: "flex", alignItems: "center", justifyContent: "center" }}>✉️</div>
                       <span>grldprz.yosh@gmail.com</span>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "white", opacity: 0.8 }}>
-                      <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>🔗</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "var(--text-color)", opacity: 0.8 }}>
+                      <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--glass-bg)", border: "1px solid var(--glass-border)", display: "flex", alignItems: "center", justifyContent: "center" }}>🔗</div>
                       <span>linkedin.com/in/geraldperez</span>
                     </div>
                   </div>
@@ -420,22 +417,18 @@ export default function Home() {
                 >
                   <div className="form-row">
                     <div className="input-group">
-                      {/* <label className="input-label">First Name</label> */}
                       <input name="first_name" type="text" placeholder="First Name" required className="input-field" />
                     </div>
                     <div className="input-group">
-                      {/* <label className="input-label">Last Name</label> */}
                       <input name="last_name" type="text" placeholder="Last Name" required className="input-field" />
                     </div>
                   </div>
 
                   <div className="input-group">
-                    {/* <label className="input-label">Email Address</label> */}
                     <input name="email" type="email" placeholder="Email Address" required className="input-field" />
                   </div>
 
                   <div className="input-group">
-                    {/* <label className="input-label">How can I help you?</label> */}
                     <textarea name="message" placeholder="How can I help you?" required className="textarea-field" />
                   </div>
 
@@ -508,7 +501,7 @@ export default function Home() {
                         }
                       }}
                       className="btn-primary"
-                      style={{ flex: 1, padding: "14px", borderRadius: "12px", background: "white", color: "black", border: "none", fontWeight: "700" }}
+                      style={{ flex: 1, padding: "14px", borderRadius: "12px", background: "var(--text-color)", color: "var(--bg-color)", border: "none", fontWeight: "700" }}
                     >
                       Confirm & Send
                     </button>
@@ -543,6 +536,8 @@ export default function Home() {
               <Link href="https://github.com/geraldlperez" target="_blank" className="hover-text">GitHub</Link>
             </div>
           </footer>
+
+          <ThemeToggle />
         </div>
       </div>
 
@@ -550,27 +545,27 @@ export default function Home() {
       <div className="precision-sidebar">
         <Link href="#top" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#top")}>
           <span className="sidebar-tooltip">Top</span>
-          <img src="https://api.iconify.design/lucide:home.svg?color=white" className="sidebar-icon" alt="Home" />
+          <div className="sidebar-icon" style={{ backgroundColor: "var(--text-color)", WebkitMaskImage: "url(https://api.iconify.design/lucide:home.svg)", WebkitMaskSize: "contain", WebkitMaskRepeat: "no-repeat", WebkitMaskPosition: "center" }} />
         </Link>
         <Link href="#expertise" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#expertise")}>
           <span className="sidebar-tooltip">Expertise</span>
-          <img src="https://api.iconify.design/lucide:zap.svg?color=white" className="sidebar-icon" alt="Expertise" />
+          <div className="sidebar-icon" style={{ backgroundColor: "var(--text-color)", WebkitMaskImage: "url(https://api.iconify.design/lucide:zap.svg)", WebkitMaskSize: "contain", WebkitMaskRepeat: "no-repeat", WebkitMaskPosition: "center" }} />
         </Link>
         <Link href="#capabilities" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#capabilities")}>
           <span className="sidebar-tooltip">Capabilities</span>
-          <img src="https://api.iconify.design/lucide:layout-grid.svg?color=white" className="sidebar-icon" alt="Capabilities" />
+          <div className="sidebar-icon" style={{ backgroundColor: "var(--text-color)", WebkitMaskImage: "url(https://api.iconify.design/lucide:layout-grid.svg)", WebkitMaskSize: "contain", WebkitMaskRepeat: "no-repeat", WebkitMaskPosition: "center" }} />
         </Link>
         <Link href="#projects" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#projects")}>
           <span className="sidebar-tooltip">Projects</span>
-          <img src="https://api.iconify.design/lucide:briefcase.svg?color=white" className="sidebar-icon" alt="Projects" />
+          <div className="sidebar-icon" style={{ backgroundColor: "var(--text-color)", WebkitMaskImage: "url(https://api.iconify.design/lucide:briefcase.svg)", WebkitMaskSize: "contain", WebkitMaskRepeat: "no-repeat", WebkitMaskPosition: "center" }} />
         </Link>
         <Link href="#creative" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#creative")}>
           <span className="sidebar-tooltip">Creative</span>
-          <img src="https://api.iconify.design/lucide:palette.svg?color=white" className="sidebar-icon" alt="Creative" />
+          <div className="sidebar-icon" style={{ backgroundColor: "var(--text-color)", WebkitMaskImage: "url(https://api.iconify.design/lucide:palette.svg)", WebkitMaskSize: "contain", WebkitMaskRepeat: "no-repeat", WebkitMaskPosition: "center" }} />
         </Link>
         <Link href="#contact" className="sidebar-item" onClick={(e) => handleSmoothScroll(e, "#contact")}>
           <span className="sidebar-tooltip">Contact</span>
-          <img src="https://api.iconify.design/lucide:mail.svg?color=white" className="sidebar-icon" alt="Contact" />
+          <div className="sidebar-icon" style={{ backgroundColor: "var(--text-color)", WebkitMaskImage: "url(https://api.iconify.design/lucide:mail.svg)", WebkitMaskSize: "contain", WebkitMaskRepeat: "no-repeat", WebkitMaskPosition: "center" }} />
         </Link>
       </div>
 
@@ -600,16 +595,16 @@ export default function Home() {
 }
 
 function ConstellationIcon({ tech, i, isHovered }: { tech: any, i: number, isHovered: boolean }) {
-  const iconUrl = `https://api.iconify.design/simple-icons:${tech.icon}.svg?color=white`;
+  const iconUrl = `url(https://api.iconify.design/simple-icons:${tech.icon}.svg)`;
   const particles = useMemo(() => [...Array(12)].map((_, j) => ({ id: j, x: (Math.random() - 0.5) * 160, y: (Math.random() - 0.5) * 160, size: Math.random() * 4 + 2 })), []);
 
   return (
     <motion.div style={{ position: "absolute", left: `${tech.x}%`, top: `${tech.y}%`, zIndex: isHovered ? 10 : 2, transform: "translate(-50%, -50%)" }} animate={{ y: isHovered ? 0 : [0, -10, 0] }} transition={{ duration: 4 + Math.random() * 2, repeat: Infinity, delay: i * 0.2, ease: "easeInOut" }}>
       <div style={{ position: "relative" }}>
-        <AnimatePresence>{isHovered && (<div style={{ position: "absolute", top: "50%", left: "50%" }}>{particles.map(p => (<motion.div key={p.id} initial={{ x: 0, y: 0, opacity: 1, scale: 1 }} animate={{ x: p.x, y: p.y, opacity: 0, scale: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} style={{ position: "absolute", width: p.size, height: p.size, background: "white", borderRadius: "50%", boxShadow: "0 0 10px white" }} />))}</div>)}</AnimatePresence>
-        <motion.div animate={{ scale: isHovered ? 1.5 : 1, backgroundColor: isHovered ? "rgba(255,255,255,0.25)" : "rgba(255,255,255,0.05)", borderColor: isHovered ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.2)" }} style={{ width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "12px", border: "1px solid", backdropFilter: "blur(8px)", position: "relative", boxShadow: isHovered ? "0 0 40px rgba(255,255,255,0.5)" : "none", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)" }}>
-          <img src={iconUrl} alt={tech.name} style={{ width: "24px", height: "24px", filter: isHovered ? "drop-shadow(0 0 10px rgba(255,255,255,0.9))" : "none" }} />
-          <span style={{ position: "absolute", top: "120%", fontSize: "0.7rem", color: "white", opacity: isHovered ? 1 : 0.4, fontWeight: isHovered ? "600" : "400", whiteSpace: "nowrap", textShadow: isHovered ? "0 0 10px rgba(255,255,255,0.5)" : "none", transition: "all 0.3s ease" }}>{tech.name}</span>
+        <AnimatePresence>{isHovered && (<div style={{ position: "absolute", top: "50%", left: "50%" }}>{particles.map(p => (<motion.div key={p.id} initial={{ x: 0, y: 0, opacity: 1, scale: 1 }} animate={{ x: p.x, y: p.y, opacity: 0, scale: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} style={{ position: "absolute", width: p.size, height: p.size, background: "var(--text-color)", borderRadius: "50%", boxShadow: "0 0 10px var(--text-color)" }} />))}</div>)}</AnimatePresence>
+        <motion.div animate={{ scale: isHovered ? 1.5 : 1, backgroundColor: isHovered ? "var(--glass-bg)" : "rgba(255,255,255,0.05)", borderColor: isHovered ? "var(--text-color)" : "var(--glass-border)" }} style={{ width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "12px", border: "1px solid", backdropFilter: "blur(8px)", position: "relative", boxShadow: isHovered ? "0 0 40px var(--glow-primary)" : "none", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)" }}>
+          <div style={{ width: "24px", height: "24px", backgroundColor: "var(--text-color)", WebkitMaskImage: iconUrl, WebkitMaskSize: "contain", WebkitMaskRepeat: "no-repeat", WebkitMaskPosition: "center", filter: isHovered ? "drop-shadow(0 0 10px var(--text-color))" : "none" }} />
+          <span style={{ position: "absolute", top: "120%", fontSize: "0.7rem", color: "var(--text-color)", opacity: isHovered ? 1 : 0.4, fontWeight: isHovered ? "600" : "400", whiteSpace: "nowrap", textShadow: isHovered ? "0 0 10px var(--text-color)" : "none", transition: "all 0.3s ease" }}>{tech.name}</span>
         </motion.div>
       </div>
     </motion.div>
